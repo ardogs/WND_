@@ -1,0 +1,16 @@
+
+
+.ant-card-body {
+    cursor: pointer;
+    transition: all 0.2s ease-in; 
+  }
+
+
+  .ant-card-body:hover {
+    border-radius: 5px;
+    background-color: #0176D3; 
+    box-shadow: 0px 10px 20px rgba(4,103,182,0.3); 
+    .ant-card-meta-title{
+        color: white;
+    }
+  }

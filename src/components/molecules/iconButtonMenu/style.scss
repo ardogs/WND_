@@ -1,0 +1,7 @@
+.auto-width-popover {
+    .ant-popover-inner-content {
+        width: max-content;
+        min-width: 280px;
+        max-width: 500px;
+    }
+}

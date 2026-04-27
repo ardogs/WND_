@@ -1,0 +1,30 @@
+.quotation-body-card {
+    height: 65vh;
+    width: 100%;
+    border-radius: 20px;
+    padding: 80px 80px;
+
+    &-form {
+        // overflow-y: auto;
+
+        .ant-input,
+        .ant-picker,
+        .ant-input-number,
+        .ant-btn {
+            border-radius: 20px;
+        }
+    }
+}
+
+.quoute-item-check, .quoute-item-list {
+    width: 100%;
+}
+
+
+.item-check{
+    margin-bottom: 10px;
+}
+
+.calculate-total-check{
+    width: 100%;
+}

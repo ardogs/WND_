@@ -1,0 +1,16 @@
+.buttonIcon {
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    width: 40;
+    height: 38;
+
+    // &-white:hover {
+    //     background-color: #d4d0d0 !important;
+    //     // color: rgb(227, 221, 221) !important
+    // }
+
+    &-red:hover {
+        background-color: rgba(244, 50, 50, 0.956) !important;
+        color: white !important
+    }
+}

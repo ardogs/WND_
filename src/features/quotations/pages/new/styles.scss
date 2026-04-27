@@ -1,0 +1,30 @@
+.content {
+
+
+    // border-style: dashed;
+    // border-width: 1px;
+    // border-color: white;
+
+    &step{
+        padding: 50px 0 50px 0;
+    }
+    // height: 100%;
+
+    // display: flex;
+    // flex-direction: column;
+    // position: relative;
+
+    &controlbuttons {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        gap: 10;
+
+    }
+
+    // &.ant-steps{
+    //     margin: 50px !important;
+    // }
+}
+

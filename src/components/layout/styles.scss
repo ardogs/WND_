@@ -1,0 +1,41 @@
+.main-view-div {
+    padding: 5px 10px 5px 10px;
+    // margin-bottom: 10px;
+    margin-top: 5px;
+
+    &-card {
+        height: 100%;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &-content {
+        height: 100%;
+        padding: 5px 48px;
+        max-width: 1920px;
+        margin: 0 auto;
+        // padding: 24px;
+        width: 100%;
+        // border-style: dashed;
+        // border-color: red;
+    }
+}
+
+.ant-layout-footer {
+    text-align: center;
+    border-radius: 20px;
+    font-size: 13px !important;
+    font-weight: 600;
+    // opacity: 1;
+    padding: 0px;
+    // border: 1px solid var(--antd-color-border);
+}
+
+.layout {
+    height: 100vh;
+}
+
+.animatedPage{
+    height: 100%;
+}

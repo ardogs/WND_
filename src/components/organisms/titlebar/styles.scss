@@ -1,0 +1,25 @@
+.div-content {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  margin-left: 10px;
+}
+
+.div-content > button:first-of-type {
+    margin-left: 10px;
+}
+
+
+
+
+.menu-wrapper {
+  flex-grow: 1;
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.no-drag-region {
+  -webkit-app-region: no-drag;
+}

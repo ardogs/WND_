@@ -1,0 +1,25 @@
+.api-button {
+    margin-right: 10px;
+
+}
+
+.my-button~svg {
+    width: 20px; // 50px es muy grande, 20px es un tamaño más común
+    height: 20px;
+    vertical-align: middle; // Ayuda a alinearlos con el centro del botón
+}
+
+
+.api-input-form {
+    .ant-form-item{
+        margin: 0;
+    }
+    .ant-input {
+        border-radius: 20px 0px 0px 20px!important;
+    }
+
+    .ant-btn {
+        border-radius: 0 20px 20px 0px!important;
+        margin: 0;
+    }
+}
