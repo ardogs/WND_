@@ -1,9 +1,10 @@
 
 import type { DefaultOptionType } from '../../atoms/select/types'
-import { companyDataSelectorMode } from './types';
+// import { companyDataSelectorMode } from './types';
 import { Select, Image } from '../../atoms'
 import { useTheme } from '../../../hooks';
 import "./styles.scss";
+import { companyDataSelectorMode } from '../../../features/companies/types';
 
 interface Props {
     option: DefaultOptionType[]

@@ -9,3 +9,6 @@ export interface Company {
     website: string,
     img: string
 }
+
+export type companyDataSelectorType = 'dependent' | 'independent';
+export type companyDataSelectorMode = 'edit' | 'view' | 'default';

@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { FormInstance } from "../../components/atoms"
 import { useCompanies } from "../companies";
 import { QuotationFormType } from "../../features/quotations/components/quoteForm/QuoteForm.data";
-import { CompanyDataSelectorType } from "../../components/organisms/companyDataSelector/types";
+// import { CompanyDataSelectorType } from "../../components/organisms/companyDataSelector/types";
+import { Company } from "../../features/companies/types";
 
 
 interface Props {
     quotationForm?: FormInstance<QuotationFormType>
-    companyDataSelectorForm?: FormInstance<CompanyDataSelectorType>
+    companyDataSelectorForm?: FormInstance<Company>
 }
 
 export const useCompanyDataForm = ({ quotationForm, companyDataSelectorForm }: Props) => {

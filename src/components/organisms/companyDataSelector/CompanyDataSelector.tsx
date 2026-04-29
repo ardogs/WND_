@@ -2,7 +2,8 @@ import { Flex } from '../../atoms';
 import { CompanyDocumentCard } from './CompanyDocumentCard'
 import { CompanyDetailsForm } from './CompanyDetailsForm';
 import { useCompanies } from '../../../hooks';
-import { companyDataSelectorMode } from './types';
+import { companyDataSelectorMode } from '../../../features/companies/types';
+// import { companyDataSelectorMode } from './types';
 
 interface Props {
     mode: companyDataSelectorMode,

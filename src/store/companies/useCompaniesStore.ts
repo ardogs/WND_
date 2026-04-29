@@ -91,13 +91,12 @@ export const useCompaniesStore = create< Companies & CompanyActions>((set) => ({
     },
     
     updateSupplier: async ( data: Company) => {
-        set({isLoading: false, error: ""})
+        set({isLoading: true, error: ""})
         try {
-            set({ isLoading: true })
             await updateSupplier(useSettingsStore.getState().apiToken, data)
         } catch (error) {
-            console.log(error)
-            set({ isLoading: false })
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            set({ error: errorMessage, isLoading: false });
         }
     }
 })) 

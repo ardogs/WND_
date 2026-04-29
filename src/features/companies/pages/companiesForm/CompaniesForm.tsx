@@ -1,13 +1,13 @@
 
 import { useParams } from "react-router-dom"
-import { CompanyDataSelectorType, companyDataSelectorMode } from '../../../../components/organisms/companyDataSelector/types';
+// import { CompanyDataSelectorType, companyDataSelectorMode } from '../../../../components/organisms/companyDataSelector/types';
 import { Flex, Form, Button } from "../../../../components/atoms";
 import { CompanyDataSelector } from "../../../../components/organisms"
 import { useCompanies, useCompanyDataForm, useTitleBar } from "../../../../hooks";
 import { TitleWithDescription } from "../../../../components/molecules";
 import { AnimatedPage } from "../../../../components/layout";
 import { useCompaniesForm } from "../../hooks/useCompaniesForm";
-import { Company } from '../../types';
+import { Company, companyDataSelectorMode } from '../../types';
 
 
 
@@ -16,12 +16,12 @@ export const CompaniesForm = () => {
     const { mode, registration_number } = useParams();
     const { handleGoBack } = useTitleBar();
     const {updateSupplier} =  useCompanies()
-    const [form] = Form.useForm<CompanyDataSelectorType | Company>();
+    const [form] = Form.useForm<Company>();
     useCompaniesForm(registration_number!);
     useCompanyDataForm({ companyDataSelectorForm: form })
 
-    const handleOnFinish = () => {
-        updateSupplier(form.getFieldsValue(true) as Company)
+    const handleOnFinish = (values: Company) => {
+        updateSupplier(values)
         // console.log("heeehee", form.getFieldsValue(true) as Company)
     }
 
