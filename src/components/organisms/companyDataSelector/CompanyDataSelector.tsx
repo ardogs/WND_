@@ -12,12 +12,16 @@ interface Props {
 
 
 export const CompanyDataSelector = ({ mode, defaultValue }: Props) => {
-    const { getSelectOptions, img, onCompanyChange, registration_number, companyData,...rest } = useCompanies();
-    const handleDafultValue = () => (defaultValue === undefined) ? companyData[0].registration_number : defaultValue ;
+    const { getSelectOptions, registration_number_id,onCompanyChange, companyData,...rest } = useCompanies();
+
+
+    const data = companyData.find( element => element.registration_number === registration_number_id )
+    // const handleDafultValue = () => (defaultValue === undefined) ? data.img : defaultValue ;
+
 
     return (
         <Flex justify='center'>
-            { (registration_number || defaultValue) && <CompanyDocumentCard option={getSelectOptions()} defaultValue={handleDafultValue()} img={img} onChangeSelect={onCompanyChange} mode={mode} />}
+            { (registration_number_id || defaultValue) && <CompanyDocumentCard option={getSelectOptions} defaultValue={registration_number_id} img={data?.img || "null"} onChangeSelect={onCompanyChange} mode={mode} />}
             <CompanyDetailsForm mode={mode} {...rest} />
         </Flex>
     )

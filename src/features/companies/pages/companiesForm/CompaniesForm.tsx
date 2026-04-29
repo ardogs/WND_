@@ -19,10 +19,10 @@ export const CompaniesForm = () => {
     const [form] = Form.useForm<CompanyDataSelectorType | Company>();
     useCompaniesForm(registration_number!);
     useCompanyDataForm({ companyDataSelectorForm: form })
-    
+
     const handleOnFinish = () => {
-        updateSupplier( form as Company)
-        console.log("heeehee", form.getFieldsValue(true))
+        updateSupplier(form.getFieldsValue(true) as Company)
+        // console.log("heeehee", form.getFieldsValue(true) as Company)
     }
 
     return (

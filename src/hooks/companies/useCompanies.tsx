@@ -1,80 +1,55 @@
 import { DefaultOptionType } from 'antd/es/select';
 import { useCompaniesStore } from '../../store/companies/useCompaniesStore'
 import { useShallow } from 'zustand/shallow';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
+// import { Company } from '../../features/companies/types';
 
-export const useCompanies = (company = 0) => {
+export const useCompanies = () => {
 
-    const { registration_number,
-        comercial_name,
-        legal_representative,
-        address,
-        type_of_business,
-        category,
-        tel_fax,
-        website,
-        img,
+    const {
         companyData,
+        registration_number_id,
         isLoading,
-        setCompanyData,
-        updateSupplier
+        setCurrentCompany,
+        updateSupplier,
+        
     } = useCompaniesStore(
         useShallow(
             (state) => ({
-                registration_number: state.registration_number,
-                comercial_name: state.comercial_name,
-                legal_representative: state.legal_representative,
-                address: state.address,
-                type_of_business: state.type_of_business,
-                category: state.category,
-                tel_fax: state.tel_fax,
-                website: state.website,
-                img: state.img,
+                registration_number_id: state.registration_number_id,
                 companyData: state.companyData,
-                setCompanyData: state.setCompanyData,
+                setCurrentCompany: state.setCurrentCompany,
                 updateSupplier: state.updateSupplier,
                 isLoading: state.isLoading
             })
         ));
 
 
-    useEffect(() => {
-        if(companyData && companyData.length > 0 && companyData[company]) {
-            setCompanyData(companyData[company]);
-        }
-    }, [companyData, company, setCompanyData])
+    // useEffect(() => {
+    //     if (companyData && companyData.length > 0) 
+    //         setCurrentCompany(registration_number_id);
+        
+    // }, [companyData, setCurrentCompany, registration_number_id])
 
 
-
-
-
-
-
-    const getSelectOptions = (): DefaultOptionType[] => {
+    const getSelectOptions = useMemo((): DefaultOptionType[] => {
+        console.log('Arranque')
         return companyData.map((option) => ({
             value: option.registration_number,
             label: option.registration_number
         }))
-    }
+    }, [companyData])
 
     const onCompanyChange = (company: string) => {
         const data = companyData.find(element => element.registration_number === company);
         if (!data) return;
+        setCurrentCompany(data.registration_number);
 
-        setCompanyData(data);
     }
 
     return {
-        registration_number,
-        comercial_name,
-        legal_representative,
-        address,
-        type_of_business,
-        category,
-        tel_fax,
-        website,
-        img,
         companyData,
+        registration_number_id,
         isLoading,
         getSelectOptions,
         onCompanyChange,

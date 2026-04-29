@@ -12,10 +12,11 @@ interface Props {
 
 export const useCompanyDataForm = ({ quotationForm, companyDataSelectorForm }: Props) => {
 
-    const data = useCompanies(0);
+    const { companyData, registration_number_id } = useCompanies();
+    const data = companyData.find( element => element.registration_number === registration_number_id  )
 
     useEffect(() => {
-        if (quotationForm === undefined)
+        if (quotationForm === undefined || !data)
             return;
 
         quotationForm.setFieldsValue({
@@ -31,7 +32,7 @@ export const useCompanyDataForm = ({ quotationForm, companyDataSelectorForm }: P
     }, [quotationForm, data]);
 
     useEffect(() => {
-        if (companyDataSelectorForm === undefined)
+        if (companyDataSelectorForm === undefined || !data)
             return;
 
         companyDataSelectorForm.setFieldsValue({

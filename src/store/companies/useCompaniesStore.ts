@@ -1,18 +1,17 @@
 import { create } from "zustand";
 import { Company } from "../../features/companies/types";
-// import img_0 from "../../assets/img/Doc_0.webp"
-// import img_1 from "../../assets/img/Doc_1.webp"
-// import img_2 from "../../assets/img/Doc_2.webp"
 import { fetchSupplierListAPI, updateSupplier } from "../../api/companies";
 import { useSettingsStore } from "../settings/useSettingStore";
-// import { Companies } from '../../features/companies/Companies';
 
 interface CompanyActions {
     isLoading: boolean
     error: string
+    registration_number_id: string
+
     fetchCompanies: (token: string) => void
-    setCompanyData: (data: Company) => void;
+    setCurrentCompany: (data: string) => void
     updateSupplier: (data: Company) => void
+
 }
 
 interface Companies {
@@ -70,18 +69,9 @@ interface Companies {
 // };
 
 
-export const useCompaniesStore = create<Company & CompanyActions & Companies>((set) => ({
-    registration_number: "",
-    comercial_name: "",
-    legal_representative: "",
-    address: "",
-    type_of_business: "",
-    category: "",
-    tel_fax: "",
-    website: "",
-    img: "",
+export const useCompaniesStore = create< Companies & CompanyActions>((set) => ({
+    registration_number_id: "SUP-001",
     companyData: [],
-
     isLoading: false,
     error: "",
 
@@ -90,33 +80,21 @@ export const useCompaniesStore = create<Company & CompanyActions & Companies>((s
         try {
             const data: Company[] = (await fetchSupplierListAPI(token)) || [];
             set({ companyData: data})
-            console.log(data)
-            
         } catch (error) {
             console.log(error)
             set({ isLoading: false })
         }
     },
 
-    setCompanyData: (company) => {
-        set({
-            registration_number: company.registration_number,
-            comercial_name: company.comercial_name,
-            legal_representative: company.legal_representative,
-            address: company.address,
-            type_of_business: company.type_of_business,
-            category: company.category,
-            tel_fax: company.tel_fax,
-            website: company.website,
-            img: company.img,
-        })
+    setCurrentCompany: (company_id: string) => {
+        set({ registration_number_id: company_id })
     },
-    updateSupplier: ( data: Company) => {
+    
+    updateSupplier: async ( data: Company) => {
         set({isLoading: false, error: ""})
         try {
             set({ isLoading: true })
-            const resp = updateSupplier(useSettingsStore.getState().apiToken, data)
-            console.log(resp)
+            await updateSupplier(useSettingsStore.getState().apiToken, data)
         } catch (error) {
             console.log(error)
             set({ isLoading: false })
