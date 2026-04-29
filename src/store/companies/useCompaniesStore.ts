@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { Company } from "../../features/companies/types";
 import { fetchSupplierListAPI, updateSupplier } from "../../api/companies";
 import { useSettingsStore } from "../settings/useSettingStore";
+import { useAuthStore } from "../settings/useAuthStore";
 
 interface CompanyActions {
     isLoading: boolean
@@ -69,7 +70,7 @@ interface Companies {
 // };
 
 
-export const useCompaniesStore = create< Companies & CompanyActions>((set) => ({
+export const useCompaniesStore = create< Companies & CompanyActions>((set, get) => ({
     registration_number_id: "SUP-001",
     companyData: [],
     isLoading: false,
@@ -91,9 +92,11 @@ export const useCompaniesStore = create< Companies & CompanyActions>((set) => ({
     },
     
     updateSupplier: async ( data: Company) => {
+        const token = useAuthStore.getState().token
         set({isLoading: true, error: ""})
         try {
             await updateSupplier(useSettingsStore.getState().apiToken, data)
+            await get().fetchCompanies(token)
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             set({ error: errorMessage, isLoading: false });

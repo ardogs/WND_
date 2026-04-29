@@ -17,12 +17,12 @@ export const CompanyDataSelector = ({ mode, defaultValue }: Props) => {
 
 
     const data = companyData.find( element => element.registration_number === registration_number_id )
-    // const handleDafultValue = () => (defaultValue === undefined) ? data.img : defaultValue ;
+    const handleDafultValue = () => (defaultValue === undefined) ? registration_number_id : defaultValue ;
 
 
     return (
         <Flex justify='center'>
-            { (registration_number_id || defaultValue) && <CompanyDocumentCard option={getSelectOptions} defaultValue={registration_number_id} img={data?.img || "null"} onChangeSelect={onCompanyChange} mode={mode} />}
+            { (registration_number_id || defaultValue) && <CompanyDocumentCard option={getSelectOptions} defaultValue={handleDafultValue()} img={data?.img || "null"} onChangeSelect={onCompanyChange} mode={mode} />}
             <CompanyDetailsForm mode={mode} {...rest} />
         </Flex>
     )

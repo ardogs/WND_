@@ -22,6 +22,7 @@ export const CompaniesForm = () => {
 
     const handleOnFinish = (values: Company) => {
         updateSupplier(values)
+        handleGoBack()
         // console.log("heeehee", form.getFieldsValue(true) as Company)
     }
 

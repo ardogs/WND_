@@ -27,7 +27,6 @@ export const updateSupplier = async(token: string, data: Company): Promise<strin
                 reg: data.registration_number
             }
         });
-        console.log(response)
         
         return response.data;
     } catch (error) {

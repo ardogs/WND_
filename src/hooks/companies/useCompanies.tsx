@@ -33,7 +33,7 @@ export const useCompanies = () => {
 
 
     const getSelectOptions = useMemo((): DefaultOptionType[] => {
-        console.log('Arranque')
+        // console.log('Arranque')
         return companyData.map((option) => ({
             value: option.registration_number,
             label: option.registration_number
