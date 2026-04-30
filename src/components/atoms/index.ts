@@ -21,3 +21,4 @@ export * from "./tabs";
 export * from "./text";
 export * from "./title";
 export * from "./card";
+export * from "./app";

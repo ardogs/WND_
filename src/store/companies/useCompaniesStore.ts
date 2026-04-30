@@ -11,7 +11,7 @@ interface CompanyActions {
 
     fetchCompanies: (token: string) => void
     setCurrentCompany: (data: string) => void
-    updateSupplier: (data: Company) => void
+    updateSupplier: (data: Company) => Promise<boolean>
 
 }
 
@@ -93,13 +93,16 @@ export const useCompaniesStore = create< Companies & CompanyActions>((set, get) 
     
     updateSupplier: async ( data: Company) => {
         const token = useAuthStore.getState().token
-        set({isLoading: true, error: ""})
+        set({ isLoading: true, error: "" })
         try {
             await updateSupplier(useSettingsStore.getState().apiToken, data)
-            await get().fetchCompanies(token)
+            get().fetchCompanies(token)
+            set({ isLoading: false })
+            return true
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             set({ error: errorMessage, isLoading: false });
+            return false
         }
     }
 })) 

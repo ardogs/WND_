@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import { ConfigProvider, theme } from 'antd';
 import { lightTheme, darkTheme } from './theme';
 import { useSettingsStore } from '../../store/settings/useSettingStore';
+import { App } from '../../components/atoms';
 
 interface Props {
     children: ReactNode
@@ -23,7 +24,9 @@ export const ThemeProvider = ({ children }: Props) => {
     const algorithm = darkmode ? theme.darkAlgorithm : theme.defaultAlgorithm;
     return (
         <ConfigProvider theme={{ ...finalTheme, algorithm }} >
-            {children}
+            <App>
+                {children}
+            </App>
         </ConfigProvider>
     )
 }

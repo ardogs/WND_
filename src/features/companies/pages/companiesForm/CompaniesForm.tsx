@@ -1,18 +1,19 @@
 
 import { useParams } from "react-router-dom"
 // import { CompanyDataSelectorType, companyDataSelectorMode } from '../../../../components/organisms/companyDataSelector/types';
-import { Flex, Form, Button } from "../../../../components/atoms";
+import { Flex, Form, Button, App } from "../../../../components/atoms";
 import { CompanyDataSelector } from "../../../../components/organisms"
 import { useCompanies, useCompanyDataForm, useTitleBar } from "../../../../hooks";
 import { TitleWithDescription } from "../../../../components/molecules";
 import { AnimatedPage } from "../../../../components/layout";
 import { useCompaniesForm } from "../../hooks/useCompaniesForm";
 import { Company, companyDataSelectorMode } from '../../types';
+// import { App } from 'antd';
 
 
 
 export const CompaniesForm = () => {
-
+    const { message } = App.useApp()
     const { mode, registration_number } = useParams();
     const { handleGoBack } = useTitleBar();
     const {updateSupplier} =  useCompanies()
@@ -20,10 +21,23 @@ export const CompaniesForm = () => {
     useCompaniesForm(registration_number!);
     useCompanyDataForm({ companyDataSelectorForm: form })
 
-    const handleOnFinish = (values: Company) => {
-        updateSupplier(values)
-        handleGoBack()
-        // console.log("heeehee", form.getFieldsValue(true) as Company)
+    const handleOnFinish = async (values: Company) => {
+        const success = await updateSupplier(values)
+        console.log(success)
+
+        if (success) {
+            console.log("mensaje d exito")
+            message.success({
+                content: 'Empresa actualizada correctamente',
+                duration: 3,
+            });
+            handleGoBack()
+        } else {
+            message.error({
+                content: 'Hubo un error al procesar la solicitud',
+                duration: 4,
+            });
+        }
     }
 
     return (
