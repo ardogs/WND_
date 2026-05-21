@@ -19,7 +19,7 @@ export const useFormList = ({form}:Props) => {
     const calculateTotalPrice = useQuotationStore(state => state.calculateTotalPrice);
     const setAutomaticCalculation = useQuotationStore(state => state.setAutomaticCalculation);
 
-    const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const updateTotals = useCallback(
         () => {

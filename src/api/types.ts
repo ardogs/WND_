@@ -6,4 +6,10 @@ export interface AppSettings {
     "language" : string
 }
 
+export interface ApiErrorResponse {
+  message: string;
+  statusCode: number;
+  errors?: string[]; // Detalles opcionales
+}
+
 

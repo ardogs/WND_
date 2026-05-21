@@ -75,7 +75,7 @@ export const useSettingsStore = create<SettingsState & SettingsActions>((set, ge
         try {
             const data = await fetchAppSettingsAPI(token);
 
-            set({ darkmode: data?.darkMode, apiVersion: data?.apiVersion, language: data?.language.toLowerCase(), apiURL: data?.apiUrl, apiToken: token, fontSize: data?.fontSize })
+            set({ darkmode: data?.darkMode, apiVersion: data?.apiVersion, language: data?.language.toLowerCase(), apiURL: data?.apiUrl, apiToken: token, fontSize: data?.fontSize, appLoaded: true  })
             get().setStatusConnection();
             i18n.changeLanguage(get().language)
             
@@ -175,7 +175,7 @@ export const useSettingsStore = create<SettingsState & SettingsActions>((set, ge
                 osVersion: release,
                 osArch: arch,
             })
-            set({ appisLoading: false, error: "", appLoaded: true });
+            set({ appisLoading: false, error: ""});
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             set({ appisLoading: false, error: errorMessage });

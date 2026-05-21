@@ -14,13 +14,14 @@ export const ThemeProvider = ({ children }: Props) => {
     const fontSize = useSettingsStore((state) => state.fontSize)
 
     const baseTheme = !darkmode ? lightTheme : darkTheme;
-    const finalTheme = { ...baseTheme,
+    const finalTheme = {
+        ...baseTheme,
         token: {
             ...baseTheme.token,
             fontSize: fontSize,
         },
     };
-
+    
     const algorithm = darkmode ? theme.darkAlgorithm : theme.defaultAlgorithm;
     return (
         <ConfigProvider theme={{ ...finalTheme, algorithm }} >

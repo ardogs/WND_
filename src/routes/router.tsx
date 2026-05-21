@@ -20,19 +20,20 @@ export const router = createBrowserRouter([
         Component: WNDApp,
         loader: async () => {
             const appLoaded = useSettingsStore.getState().appLoaded
-            if (appLoaded)
-                return;
 
             const dataPromise = useSettingsStore.getState().getSystemInfo();
 
             const tokenAPIFromLocalStorage = useAuthStore.getState().token;
-            const fetchSettingsPromise = useSettingsStore.getState().fetchAppSettings( tokenAPIFromLocalStorage  );
-            // const apiConnectionStatus =  useSettingsStore.getState().setStatusConnection();
+            const fetchSettingsPromise = useSettingsStore.getState().fetchAppSettings(tokenAPIFromLocalStorage)
             const companiesDataPromise = useCompaniesStore.getState().fetchCompanies(tokenAPIFromLocalStorage);
             const timerPromise = new Promise(resolve => setTimeout(resolve, 2000));
 
+
             await Promise.all([dataPromise, companiesDataPromise, fetchSettingsPromise, timerPromise]);
-            // await Promise.all([apiConnectionStatus])
+
+            if (appLoaded)
+                return;
+
             return null;
         },
         hydrateFallbackElement: <LoadingScreen />,
