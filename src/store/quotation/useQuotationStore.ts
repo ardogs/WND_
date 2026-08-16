@@ -1,4 +1,7 @@
 import { create } from "zustand";
+import { QuotationFormType } from "../../features/quotations/components/quoteForm/QuoteForm.data";
+import { useAuthStore } from "../settings/useAuthStore";
+import { saveQuotation } from "../../api/quotations";
 // import { CheckboxChangeEvent } from "antd";
 
 type mode = 'read' | 'edit' | 'create';
@@ -11,10 +14,13 @@ interface QuotationForm {
     calculatePriceBeforeTaxes: boolean
     calculateTotalVat: boolean
     calculateTotalPrice: boolean
+    isLoading: boolean,
+    error: string
 }
 
 interface QuotationActions {
-    setAutomaticCalculation: (key: CheckItemKey, value: boolean) => void
+    setAutomaticCalculation: (key: CheckItemKey, value: boolean) => void,
+    sendQuotationData: (data: QuotationFormType) => Promise<boolean>
 }
 
 const initialValues: QuotationForm = {
@@ -24,6 +30,8 @@ const initialValues: QuotationForm = {
     calculateSupplyPrice: true,
     calculateTotalVat: true,
     calculateTotalPrice: true,
+    isLoading: false,
+    error: ""
 }
 
 export type CheckItemKey = keyof typeof initialValues;
@@ -50,5 +58,20 @@ export const useQuotationStore = create<QuotationForm & QuotationActions>((set) 
             ...state,
             [key]: value,
         }))
+    },
+
+    sendQuotationData: async (data: QuotationFormType) => {
+        const token = useAuthStore.getState().token
+        set({ isLoading: true, error: "" })
+        try {
+            await saveQuotation(token, data)
+            // get().fetchCompanies(token)
+            set({ isLoading: false })
+            return true
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            set({ error: errorMessage, isLoading: false });
+            return false
+        }
     }
 })) 

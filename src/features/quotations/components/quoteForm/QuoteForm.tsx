@@ -1,12 +1,10 @@
 import { Form } from '../../../../components/atoms'
 import { Steps, CompanyDataSelector } from '../../../../components/organisms'
 import { StepsContent, useCompanyDataForm } from '../../../../hooks'
-// import { useAuthStore } from '../../../../store/settings/useAuthStore'
 import { useFormList } from '../../hooks/quotationForm'
 import { QuoteGetFile } from '../quoteGetFile'
 import { QuoteBody } from '../quoteInformation'
 import { QuoteInformationReview } from '../quoteReview'
-
 import { initialValues, QuotationFormType } from './QuoteForm.data'
 
 
@@ -73,11 +71,11 @@ export const QuoteForm = () => {
     useCompanyDataForm({ quotationForm: form });
     
 
-    const handleOnFinish = () => {
+    const handleOnFinish = async () => {
         console.log("heeehee", form.getFieldsValue(true))
-        
+        await handleSendQuotation(form.getFieldsValue(true))
     }
-    const { handleOnFieldChange } = useFormList({ form });
+    const { handleOnFieldChange, handleSendQuotation } = useFormList({ form });
 
     return (
         <Form initialValues={initialValues} preserve={true} onFinish={handleOnFinish} form={form} validateMessages={validateMessages} onValuesChange={handleOnFieldChange}>

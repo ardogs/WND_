@@ -9,6 +9,7 @@ interface Props{
     form: FormInstance<QuotationFormType>
 }
 
+
 const VAT_VALUE: number = 0.10;
 export const useFormList = ({form}:Props) => {
 
@@ -18,6 +19,8 @@ export const useFormList = ({form}:Props) => {
     const calculateTotalVat = useQuotationStore(state => state.calculateTotalVat);
     const calculateTotalPrice = useQuotationStore(state => state.calculateTotalPrice);
     const setAutomaticCalculation = useQuotationStore(state => state.setAutomaticCalculation);
+    const handleSendQuotation = useQuotationStore(state => state.sendQuotationData);
+    
 
     const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -164,6 +167,7 @@ export const useFormList = ({form}:Props) => {
         calculateTotalVat,
         calculateTotalPrice,
         handleCheckBox,
-        handleOnFieldChange
+        handleOnFieldChange,
+        handleSendQuotation
     }
 }

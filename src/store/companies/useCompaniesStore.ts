@@ -70,7 +70,7 @@ interface Companies {
 // };
 
 
-export const useCompaniesStore = create< Companies & CompanyActions>((set, get) => ({
+export const useCompaniesStore = create<Companies & CompanyActions>((set, get) => ({
     registration_number_id: "SUP-001",
     companyData: [],
     isLoading: false,
@@ -79,8 +79,14 @@ export const useCompaniesStore = create< Companies & CompanyActions>((set, get) 
     fetchCompanies: async (token: string) => {
         set({ isLoading: true, error: "" })
         try {
-            const data: Company[] = (await fetchSupplierListAPI(token)) || [];
-            set({ companyData: data})
+
+            const response = await fetchSupplierListAPI(token);
+            if (Array.isArray(response)) {
+                set({ companyData: response, isLoading: false });
+            } else {
+                const errorMessage = response?.message || "Failed to fetch companies";
+                set({ error: errorMessage, isLoading: false });
+            }
         } catch (error) {
             console.log(error)
             set({ isLoading: false })
@@ -90,8 +96,8 @@ export const useCompaniesStore = create< Companies & CompanyActions>((set, get) 
     setCurrentCompany: (company_id: string) => {
         set({ registration_number_id: company_id })
     },
-    
-    updateSupplier: async ( data: Company) => {
+
+    updateSupplier: async (data: Company) => {
         const token = useAuthStore.getState().token
         set({ isLoading: true, error: "" })
         try {
