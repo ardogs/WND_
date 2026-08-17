@@ -24,6 +24,8 @@ const FormLayoutContext = createContext<FormLayoutContextProps>({
   layout: 'horizontal',
 })
 
+const FormInstanceContext = createContext<EnhancedFormInstance<any> | null>(null)
+
 function convertNameToPath(name?: string | (string | number)[]): string {
   if (!name) return ''
   if (Array.isArray(name)) {
@@ -115,6 +117,10 @@ export function useForm<T extends FieldValues = FieldValues>(
 }
 
 export function useFormInstance<T extends FieldValues = any>(): EnhancedFormInstance<T> {
+  const contextForm = useContext(FormInstanceContext)
+  if (contextForm) {
+    return contextForm
+  }
   const methods = useRHFFormContext<T>()
   if (!methods) {
     return enhanceForm<T>({
@@ -311,7 +317,7 @@ export interface FormProps<T extends FieldValues = any>
   extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onFinish'> {
   form?: EnhancedFormInstance<T>
   initialValues?: Partial<T>
-  onFinish?: (values: T) => void | Promise<void>
+  onFinish?: (values: T) => void | Promise<void> | boolean | Promise<boolean> | Promise<any>
   onValuesChange?: (changedValues: any, allValues: T) => void
   layout?: 'horizontal' | 'vertical' | 'inline'
   preserve?: boolean
@@ -329,6 +335,8 @@ const FormWrapper = <T extends FieldValues = any>({
   className,
   disabled = false,
   layout = 'horizontal',
+  preserve: _preserve,
+  validateMessages: _validateMessages,
   ...rest
 }: FormProps<T>) => {
   const [internalForm] = useForm<T>({ defaultValues: initialValues as any })
@@ -364,22 +372,24 @@ const FormWrapper = <T extends FieldValues = any>({
   }
 
   return (
-    <FormLayoutContext.Provider value={{ layout }}>
-      <FormProvider {...enhanced}>
-        <form
-          onSubmit={handleSubmit}
-          className={cn(
-            layout === 'inline' ? 'flex flex-row items-center gap-2' : 'w-full',
-            className
-          )}
-          {...rest}
-        >
-          <fieldset disabled={disabled} className="contents">
-            {children}
-          </fieldset>
-        </form>
-      </FormProvider>
-    </FormLayoutContext.Provider>
+    <FormInstanceContext.Provider value={enhanced}>
+      <FormLayoutContext.Provider value={{ layout }}>
+        <FormProvider {...enhanced}>
+          <form
+            onSubmit={handleSubmit}
+            className={cn(
+              layout === 'inline' ? 'flex flex-row items-center gap-2' : 'w-full',
+              className
+            )}
+            {...rest}
+          >
+            <fieldset disabled={disabled} className="contents">
+              {children}
+            </fieldset>
+          </form>
+        </FormProvider>
+      </FormLayoutContext.Provider>
+    </FormInstanceContext.Provider>
   )
 }
 

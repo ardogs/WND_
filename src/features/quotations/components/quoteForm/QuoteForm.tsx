@@ -21,9 +21,10 @@ export const QuoteForm = () => {
   useCompanyDataForm({ quotationForm: form })
   const { handleOnFieldChange, handleSendQuotation } = useFormList({ form })
 
-  const handleOnFinish = async () => {
-    const data = form.getFieldsValue(true)
-    await handleSendQuotation(data)
+  const handleOnFinish = async (values?: QuotationFormType) => {
+    const data = values || form.getFieldsValue(true)
+    const success = await handleSendQuotation(data)
+    return success
   }
 
   const steps: StepsContent[] = useMemo(

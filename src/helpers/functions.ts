@@ -109,15 +109,16 @@ export const extractCompanyFormValues = (company: Partial<Company> | undefined |
  */
 export const returnError = (error: unknown): ApiErrorResponse => {
     if (axios.isAxiosError(error)) {
-        const errorMessage = error.message ?? 'An unexpected error occurred';
+        const serverError = error.response?.data?.error || error.response?.data?.message;
+        const errorMessage = serverError || error.message || 'Error inesperado en la comunicación con el servidor';
         return {
             statusCode: error.response?.status || 500,
-            message: `Axios Error: ${errorMessage}`,
+            message: errorMessage,
         };
     }
 
     return {
         statusCode: 500,
-        message: error instanceof Error ? error.message : 'An unexpected error occurred',
+        message: error instanceof Error ? error.message : 'Error inesperado en la aplicación',
     };
 };
