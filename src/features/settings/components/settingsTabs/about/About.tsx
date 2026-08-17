@@ -2,7 +2,6 @@ import Logo from '../../../../../assets/img/logo_2.webp'
 import { Image } from '../../../../../components/atoms'
 import { useSettings } from '../../../../../hooks'
 import { Server, Layers, AppWindow, Cpu, Monitor, Globe } from 'lucide-react'
-import './styles.scss'
 
 export const About = () => {
   const {
@@ -61,10 +60,10 @@ export const About = () => {
 
   return (
     <div className="w-full">
-      <div className="about-card shadow">
+      <div className="w-full max-w-[680px] bg-card text-card-foreground border border-border rounded-xl p-6 mb-4 shadow-sm">
         {/* Header con Logo y Título */}
         <div className="flex items-center gap-4">
-          <div className="about-logo-box">
+          <div className="flex items-center justify-center w-[58px] h-[58px] rounded-xl bg-background border border-border p-2 shrink-0">
             <Image src={Logo} alt="WND Logo" width={42} className="object-contain" />
           </div>
           <div className="flex-1 min-w-0">
@@ -92,9 +91,14 @@ export const About = () => {
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {specs.map((item, index) => (
-              <div key={index} className="about-spec-item">
+              <div
+                key={index}
+                className="flex items-center justify-between p-2.5 sm:px-3.5 rounded-lg bg-secondary/40 border border-border/60 hover:bg-secondary/70 transition-colors"
+              >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="about-icon-badge">{item.icon}</div>
+                  <div className="flex items-center justify-center w-[26px] h-[26px] rounded-md bg-background border border-border/80 text-primary shrink-0">
+                    {item.icon}
+                  </div>
                   <span className="text-xs font-medium text-muted-foreground truncate">
                     {item.label}
                   </span>

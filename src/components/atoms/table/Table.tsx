@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, memo } from 'react'
 import {
   Table as ShadcnTable,
   TableHeader,
@@ -12,7 +12,7 @@ import { Button } from '../button/Button'
 import { cn } from '@/lib/utils'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-export const Table = <T extends Record<string, any>>({
+const TableInner = <T extends Record<string, any>>({
   columns = [],
   dataSource,
   data,
@@ -23,7 +23,9 @@ export const Table = <T extends Record<string, any>>({
   rowKey = 'key',
   onRow,
 }: TableProps<T>) => {
-  const items = dataSource || data || []
+  const rawItems = dataSource || data
+  const items = useMemo(() => rawItems || [], [rawItems])
+
   const [currentPage, setCurrentPage] = useState(
     typeof pagination === 'object' && pagination.current ? pagination.current : 1
   )
@@ -161,3 +163,5 @@ export const Table = <T extends Record<string, any>>({
     </div>
   )
 }
+
+export const Table = memo(TableInner) as typeof TableInner

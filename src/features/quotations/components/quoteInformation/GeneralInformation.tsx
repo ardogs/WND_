@@ -10,7 +10,6 @@ export const GeneralInformation = () => {
             label="Fecha"
             name="date"
             layout="vertical"
-            rules={[{ required: true, message: 'La fecha es obligatoria' }]}
           >
             <DatePicker />
           </Form.Item>
@@ -20,7 +19,6 @@ export const GeneralInformation = () => {
             label="Cliente"
             name="customer"
             layout="vertical"
-            rules={[{ required: true, message: 'El cliente es obligatorio' }]}
           >
             <Input placeholder="Nombre del cliente" />
           </Form.Item>
@@ -30,7 +28,6 @@ export const GeneralInformation = () => {
             label="Concepto de trabajo"
             name="work_concept"
             layout="vertical"
-            rules={[{ required: true, message: 'El concepto de trabajo es obligatorio' }]}
           >
             <Input placeholder="Ej. Instalación de ventanas" />
           </Form.Item>
@@ -40,7 +37,6 @@ export const GeneralInformation = () => {
             label="Duración del trabajo"
             name="duration_of_work"
             layout="vertical"
-            rules={[{ required: true, message: 'La duración del trabajo es obligatoria' }]}
           >
             <Input placeholder="Ej. 15 días" />
           </Form.Item>

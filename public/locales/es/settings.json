@@ -1,3 +1,6 @@
 {
-    "test": "test en español"
+    "title": "Configuración",
+    "system": "Sistema",
+    "api_connection": "Conexión al API",
+    "about": "Acerca de"
 }

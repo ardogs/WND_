@@ -5,7 +5,6 @@ import { AnimatedPage } from '../../layout'
 import { useRouteError, isRouteErrorResponse } from 'react-router-dom'
 import { ArrowLeft, Home as HomeIcon, AlertCircle } from 'lucide-react'
 import animation from '../../../assets/animations/404Error.json'
-import './styles.scss'
 
 export const Error = () => {
   const { handleHome, handleGoBack } = useTitleBar()

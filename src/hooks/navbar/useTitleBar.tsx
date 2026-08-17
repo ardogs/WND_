@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/img/logo_2.webp'
 import { useTranslation } from 'react-i18next'
@@ -11,52 +11,52 @@ export interface TitleBarMenuItem {
 
 export const useTitleBar = () => {
   const { t } = useTranslation('header')
-
-  const menuItems: TitleBarMenuItem[] = [
-    {
-      label: t('quotations'),
-      to: '/quotations',
-      key: 'quotations',
-    },
-    {
-      label: t('invoices'),
-      to: '/invoices',
-      key: 'invoices',
-    },
-    {
-      label: t('companies'),
-      to: '/companies',
-      key: 'companies',
-    },
-  ]
-
   const navigate = useNavigate()
 
-  const handleMinimize = () => {
+  const menuItems: TitleBarMenuItem[] = useMemo(
+    () => [
+      {
+        label: t('quotations'),
+        to: '/quotations',
+        key: 'quotations',
+      },
+      {
+        label: t('invoices'),
+        to: '/invoices',
+        key: 'invoices',
+      },
+      {
+        label: t('companies'),
+        to: '/companies',
+        key: 'companies',
+      },
+    ],
+    [t]
+  )
+
+  const handleMinimize = useCallback(() => {
     window?.electronAPI?.minimize?.()
-  }
+  }, [])
 
-  const handleMaximize = () => {
+  const handleMaximize = useCallback(() => {
     window?.electronAPI?.maximize?.()
-  }
+  }, [])
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     window?.electronAPI?.close?.()
-  }
+  }, [])
 
-  const handleHome = () => {
+  const handleHome = useCallback(() => {
     navigate('/')
-  }
-  const handleGoBack = () => {
+  }, [navigate])
+
+  const handleGoBack = useCallback(() => {
     navigate(-1)
-  }
+  }, [navigate])
 
   return {
-    //Values
     menuItems,
     logo,
-
-    //Functions
     handleMinimize,
     handleMaximize,
     handleClose,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
@@ -12,7 +12,7 @@ export interface MenuItem {
 }
 
 export interface MenuProps {
-  items?: MenuItem[] | any[]
+  items?: MenuItem[]
   className?: string
 }
 
@@ -26,12 +26,7 @@ const getSelectedKey = (pathname: string): string => {
 
 export const Menu = ({ items = [], className }: MenuProps) => {
   const location = useLocation()
-  const [current, setCurrent] = useState<string>('')
-
-  useEffect(() => {
-    const currentPath = getSelectedKey(location.pathname)
-    setCurrent(currentPath)
-  }, [location.pathname])
+  const current = getSelectedKey(location.pathname)
 
   return (
     <nav className={cn('flex items-center gap-1.5', className)}>

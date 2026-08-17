@@ -1,27 +1,26 @@
 import { useMemo } from 'react'
-import dayjs from 'dayjs'
 import { Title, Col, Row, Form, Table, Descriptions } from '../../../../components/atoms'
 import { QuotationFormType, QuotationItem } from '../quoteForm/QuoteForm.data'
 import { ColumnsType, AnyObject } from '../../../../components/atoms/table/types'
-import { formatKRW } from '../../../../helpers/functions'
-import './styles.scss'
-
-const numberFormat = (value: string) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+import { formatKRW, formatNumber, formatDateToISO } from '../../../../helpers/functions'
 
 export const QuoteInformationReview = () => {
   const form = Form.useFormInstance()
   const data = form.getFieldsValue(true) as QuotationFormType
 
-  const columns_table1: ColumnsType<AnyObject> = [
-    { title: 'Descripción', dataIndex: 'description', key: 'description', align: 'left' },
-    { title: 'Especificación', dataIndex: 'product_especification', key: 'product_especification' },
-    { title: 'Unidad', dataIndex: 'unit', key: 'unit', align: 'center' },
-    { title: 'Cant.', dataIndex: 'amount', key: 'amount', align: 'right', render: numberFormat },
-    { title: 'P. Unitario', dataIndex: 'unit_price', key: 'unit_price', align: 'right', render: numberFormat },
-    { title: 'P. Suministro', dataIndex: 'supply_price', key: 'supply_price', align: 'right', render: numberFormat },
-    { title: 'IVA', dataIndex: 'vat', key: 'vat', align: 'right', render: numberFormat },
-    { title: 'Observaciones', dataIndex: 'observations', key: 'observations' },
-  ]
+  const columns_table1: ColumnsType<AnyObject> = useMemo(
+    () => [
+      { title: 'Descripción', dataIndex: 'description', key: 'description', align: 'left' },
+      { title: 'Especificación', dataIndex: 'product_especification', key: 'product_especification' },
+      { title: 'Unidad', dataIndex: 'unit', key: 'unit', align: 'center' },
+      { title: 'Cant.', dataIndex: 'amount', key: 'amount', align: 'right', render: formatNumber },
+      { title: 'P. Unitario', dataIndex: 'unit_price', key: 'unit_price', align: 'right', render: formatNumber },
+      { title: 'P. Suministro', dataIndex: 'supply_price', key: 'supply_price', align: 'right', render: formatNumber },
+      { title: 'IVA', dataIndex: 'vat', key: 'vat', align: 'right', render: formatNumber },
+      { title: 'Observaciones', dataIndex: 'observations', key: 'observations' },
+    ],
+    []
+  )
 
   const dataSource: (QuotationItem & { key: number })[] = useMemo(
     () => (data?.quotation_item || []).map((item, index) => ({ key: index, ...item })),
@@ -46,7 +45,7 @@ export const QuoteInformationReview = () => {
           <div className="h-full p-5 sm:p-6 rounded-2xl border border-border bg-card shadow-sm">
             <Descriptions title="Información General" layout="vertical" bordered className="w-full">
               <Descriptions.Item label="Fecha">
-                {data?.date ? dayjs(data.date).format('YYYY-MM-DD') : '-'}
+                {data?.date ? formatDateToISO(data.date) : '-'}
               </Descriptions.Item>
               <Descriptions.Item label="Cliente">{data?.customer || '-'}</Descriptions.Item>
               <Descriptions.Item label="Concepto">{data?.work_concept || '-'}</Descriptions.Item>

@@ -1,9 +1,8 @@
 import { Select } from '../../../../../components/atoms'
 import { DefaultOptionType } from '../../../../../components/atoms/select/types'
 import { useSettings } from '../../../../../hooks'
-import './styles.scss'
 
-const option: DefaultOptionType[] = [
+const options: DefaultOptionType[] = [
   { value: 'es', label: 'Español' },
   { value: 'kr', label: '한국어' },
   { value: 'en', label: 'English' },
@@ -14,11 +13,11 @@ export const LanguageSelect = () => {
 
   return (
     <Select
-      option={option}
+      option={options}
       handleChange={handleLanguagueChange}
       defaultValue={language}
       loading={languageisLoading}
-      className="language-select w-[200px]"
+      className="w-[200px]"
     />
   )
 }

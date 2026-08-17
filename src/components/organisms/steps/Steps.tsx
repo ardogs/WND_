@@ -5,7 +5,6 @@ import { PopConfirm } from '../../organisms'
 import { StepsContent, useSteps, useTitleBar } from '../../../hooks'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import './styles.scss'
 
 interface Props {
   stepsArray: StepsContent[]

@@ -1,7 +1,6 @@
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai'
 import { Button, Flex } from '../../../../../components/atoms'
 import { useSettings } from '../../../../../hooks'
-import './styles.scss'
 
 export const APIConnectionStatus = () => {
   const {
@@ -20,9 +19,9 @@ export const APIConnectionStatus = () => {
         disabled={statusConnectionisLoading}
       />
       {statusConnection ? (
-        <AiOutlineCheckCircle className="api-status-icon connected" />
+        <AiOutlineCheckCircle className="text-xl text-emerald-500" />
       ) : (
-        <AiOutlineCloseCircle className="api-status-icon disconnected" />
+        <AiOutlineCloseCircle className="text-xl text-destructive" />
       )}
     </Flex>
   )

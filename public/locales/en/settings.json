@@ -1,3 +1,6 @@
 {
-    "test": "test en ingles"
+    "title": "Settings",
+    "system": "System",
+    "api_connection": "API Connection",
+    "about": "About"
 }

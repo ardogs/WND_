@@ -6,7 +6,7 @@ export interface ISettings extends Document {
     language: 'EN' | 'ES' | 'KR';
     apiUrl: string;
     apiToken: string;
-    apiPwd: string;
+    apiVersion: string;
 }
 
 const SettingsSchema: Schema = new Schema({

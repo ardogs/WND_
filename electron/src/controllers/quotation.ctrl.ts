@@ -63,7 +63,7 @@ export const processQuotation = async (req: Request, res: Response): Promise<voi
         worksheet.getCell('B10').value = newQuotation.work_concept;
 
         worksheet.getCell('H30').value = newQuotation.price_before_taxes;
-        worksheet.getCell('B10').value = newQuotation.vat_total;
+        worksheet.getCell('J30').value = newQuotation.vat_total;
         worksheet.getCell('C31').value = newQuotation.total_price_number;
 
         // 4. Rellenar los Items dinámicamente

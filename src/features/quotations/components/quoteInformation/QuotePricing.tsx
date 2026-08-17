@@ -5,17 +5,15 @@ import { QuotationFormType } from '../quoteForm/QuoteForm.data'
 
 const MIN_NUMBER = 0
 const MAX_NUMBER = 100000000
-const formatter = (value: number | string | undefined) =>
-  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
-export const QuoutePricing = () => {
+export const QuotePricing = () => {
   const form = Form.useFormInstance<QuotationFormType>()
   const { calculateTotalPrice, calculateTotalVat, calculatePriceBeforeTaxes } = useFormList({ form })
 
   return (
     <div className="w-full">
       <Divider orientation="left" description="Precio total de la cotización" />
-      <Flex justify="flex-end" align="center" className="calculate-total-check mb-3">
+      <Flex justify="flex-end" align="center" className="w-full mb-3">
         <CalculateTotalCheck />
       </Flex>
 
@@ -25,11 +23,9 @@ export const QuoutePricing = () => {
             label="Precio antes de impuestos"
             name="price_before_taxes"
             layout="vertical"
-            rules={[{ required: true }]}
           >
             <InputNumber
               disabled={calculatePriceBeforeTaxes}
-              formatter={formatter}
               min={MIN_NUMBER}
               max={MAX_NUMBER}
               controls={false}
@@ -41,11 +37,9 @@ export const QuoutePricing = () => {
             label="IVA total"
             name="vat_total"
             layout="vertical"
-            rules={[{ required: true }]}
           >
             <InputNumber
               disabled={calculateTotalVat}
-              formatter={formatter}
               min={MIN_NUMBER}
               max={MAX_NUMBER}
               controls={false}
@@ -57,11 +51,9 @@ export const QuoutePricing = () => {
             label="Precio total"
             name="total_price_number"
             layout="vertical"
-            rules={[{ required: true }]}
           >
             <InputNumber
               disabled={calculateTotalPrice}
-              formatter={formatter}
               min={MIN_NUMBER}
               max={MAX_NUMBER}
               controls={false}
@@ -73,7 +65,6 @@ export const QuoutePricing = () => {
             label="Precio total en letras"
             name="total_price_letter"
             layout="vertical"
-            rules={[{ required: true }]}
           >
             <Input placeholder="Precio en letras" />
           </Form.Item>

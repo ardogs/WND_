@@ -1,9 +1,9 @@
+import { useMemo } from 'react'
 import { ColumnsType } from '../../../../components/atoms/table/types'
 import { AnimatedPage } from '../../../../components/layout'
 import { Flex, Table } from '../../../../components/atoms'
 import { TitleWithDescription } from '../../../../components/molecules'
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { AiOutlineEdit, AiOutlineEye } from 'react-icons/ai'
 import { useCompaniesStore } from '../../../../store/companies/useCompaniesStore'
 
@@ -14,64 +14,66 @@ interface DataType {
   legalRepresentative: string
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: 'Número de registro',
-    dataIndex: 'registrationNumber',
-    key: 'registrationNumber',
-  },
-  {
-    title: 'Nombre comercial',
-    dataIndex: 'comercialName',
-    key: 'comercialName',
-    render: (text) => <span className="font-semibold text-foreground">{text}</span>,
-  },
-  {
-    title: 'Representante Legal',
-    dataIndex: 'legalRepresentative',
-    key: 'legalRepresentative',
-  },
-  {
-    title: 'Acciones',
-    key: 'action',
-    align: 'center',
-    render: (_: any, record: DataType) => {
-      const regNum = record?.registrationNumber || ''
-      return (
-        <Flex gap={16} justify="center">
-          <Link to={`/companies/companiesForm/view/${regNum}`}>
-            <AiOutlineEye
-              className="cursor-pointer text-muted-foreground hover:text-primary transition-colors text-base"
-              title="Ver detalles"
-            />
-          </Link>
-
-          <Link to={`/companies/companiesForm/edit/${regNum}`}>
-            <AiOutlineEdit
-              className="cursor-pointer text-muted-foreground hover:text-primary transition-colors text-base"
-              title="Editar registro"
-            />
-          </Link>
-        </Flex>
-      )
-    },
-  },
-]
-
 export const Home = () => {
   const companyData = useCompaniesStore((state) => state.companyData)
-  const [data, setData] = useState<DataType[] | undefined>()
 
-  useEffect(() => {
-    const dataTable = companyData.map((item) => ({
-      key: item.registration_number,
-      registrationNumber: item.registration_number,
-      comercialName: item.comercial_name,
-      legalRepresentative: item.legal_representative,
-    }))
+  const columns: ColumnsType<DataType> = useMemo(
+    () => [
+      {
+        title: 'Número de registro',
+        dataIndex: 'registrationNumber',
+        key: 'registrationNumber',
+      },
+      {
+        title: 'Nombre comercial',
+        dataIndex: 'comercialName',
+        key: 'comercialName',
+        render: (text) => <span className="font-semibold text-foreground">{text}</span>,
+      },
+      {
+        title: 'Representante Legal',
+        dataIndex: 'legalRepresentative',
+        key: 'legalRepresentative',
+      },
+      {
+        title: 'Acciones',
+        key: 'action',
+        align: 'center',
+        render: (_: unknown, record: DataType) => {
+          const regNum = record?.registrationNumber || ''
+          return (
+            <Flex gap={16} justify="center">
+              <Link to={`/companies/companiesForm/view/${regNum}`}>
+                <AiOutlineEye
+                  className="cursor-pointer text-muted-foreground hover:text-primary transition-colors text-base"
+                  title="Ver detalles"
+                />
+              </Link>
 
-    setData(dataTable)
-  }, [companyData])
+              <Link to={`/companies/companiesForm/edit/${regNum}`}>
+                <AiOutlineEdit
+                  className="cursor-pointer text-muted-foreground hover:text-primary transition-colors text-base"
+                  title="Editar registro"
+                />
+              </Link>
+            </Flex>
+          )
+        },
+      },
+    ],
+    []
+  )
+
+  const data = useMemo(
+    () =>
+      companyData.map((item) => ({
+        key: item.registration_number,
+        registrationNumber: item.registration_number,
+        comercialName: item.comercial_name,
+        legalRepresentative: item.legal_representative,
+      })),
+    [companyData]
+  )
 
   return (
     <AnimatedPage>

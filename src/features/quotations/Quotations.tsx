@@ -1,11 +1,10 @@
 import { Outlet } from 'react-router-dom'
 import { AnimatedPage } from '../../components/layout'
-import './styles.scss'
 
 export const Quotations = () => {
   return (
     <AnimatedPage>
-      <div className="quotationsDiv w-full">
+      <div className="w-full h-full flex flex-col">
         <Outlet />
       </div>
     </AnimatedPage>

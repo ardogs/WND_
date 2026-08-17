@@ -7,7 +7,7 @@ import { Settings } from "../features/settings/Settings";
 import { Companies } from "../features/companies/Companies";
 import { Home as QuotationHome } from "../features/quotations/pages/main/Home";
 import { Home as CompaniesHome } from "../features/companies/pages/main/Home";
-import { NewQuotation } from "../features/quotations/pages"
+import { NewQuotation } from "../features/quotations/pages";
 import { useCompaniesStore } from "../store/companies/useCompaniesStore";
 import { useSettingsStore } from "../store/settings/useSettingStore";
 import { Error, LoadingScreen } from "../components/organisms";
@@ -19,20 +19,16 @@ export const router = createBrowserRouter([
         path: '/',
         Component: WNDApp,
         loader: async () => {
-            const appLoaded = useSettingsStore.getState().appLoaded
+            const appLoaded = useSettingsStore.getState().appLoaded;
+            if (appLoaded) return null;
 
             const dataPromise = useSettingsStore.getState().getSystemInfo();
-
             const tokenAPIFromLocalStorage = useAuthStore.getState().token;
-            const fetchSettingsPromise = useSettingsStore.getState().fetchAppSettings(tokenAPIFromLocalStorage)
+            const fetchSettingsPromise = useSettingsStore.getState().fetchAppSettings(tokenAPIFromLocalStorage);
             const companiesDataPromise = useCompaniesStore.getState().fetchCompanies(tokenAPIFromLocalStorage);
-            const timerPromise = new Promise(resolve => setTimeout(resolve, 2000));
-
+            const timerPromise = new Promise((resolve) => setTimeout(resolve, 2000));
 
             await Promise.all([dataPromise, companiesDataPromise, fetchSettingsPromise, timerPromise]);
-
-            if (appLoaded)
-                return;
 
             return null;
         },
@@ -102,10 +98,5 @@ export const router = createBrowserRouter([
                 ]
             }
         ],
-
     },
-
-
-],
-    // fallbackElement: <AppLoadingFallback />,
-);
+]);

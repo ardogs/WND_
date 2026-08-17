@@ -36,17 +36,16 @@ export const QuoteItemList = () => {
     <div className="w-full">
       <Divider orientation="left" description="Lista de insumos" />
 
-      <Flex justify="flex-end" align="center" className="quoute-item-check mb-3">
+      <Flex justify="flex-end" align="center" className="w-full mb-3">
         <CalculateItemCheck />
       </Flex>
 
-      <div className="quoute-item-list w-full space-y-2.5">
+      <div className="w-full space-y-2.5">
         {fields.map((field, index) => (
           <Row gutter={[6, 1]} key={field.id} align="middle">
             <Col span={4}>
               <Form.Item
                 name={`quotation_item.${index}.description`}
-                rules={[{ required: true, message: 'La descripción es obligatoria' }]}
                 label={index < 1 ? 'Descripción' : undefined}
                 layout="vertical"
               >
@@ -57,7 +56,6 @@ export const QuoteItemList = () => {
             <Col span={3}>
               <Form.Item
                 name={`quotation_item.${index}.product_especification`}
-                rules={[{ required: true, message: 'La especificación es obligatoria' }]}
                 label={index < 1 ? 'Especificación' : undefined}
                 layout="vertical"
               >
@@ -68,7 +66,6 @@ export const QuoteItemList = () => {
             <Col span={2}>
               <Form.Item
                 name={`quotation_item.${index}.unit`}
-                rules={[{ required: true, message: 'La unidad es obligatoria' }]}
                 label={index < 1 ? 'Unidad' : undefined}
                 layout="vertical"
               >
@@ -79,7 +76,6 @@ export const QuoteItemList = () => {
             <Col span={2}>
               <Form.Item
                 name={`quotation_item.${index}.amount`}
-                rules={[{ required: true, message: 'La cantidad es obligatoria' }]}
                 label={index < 1 ? 'Cant.' : undefined}
                 layout="vertical"
               >
@@ -90,7 +86,6 @@ export const QuoteItemList = () => {
             <Col span={3}>
               <Form.Item
                 name={`quotation_item.${index}.unit_price`}
-                rules={[{ required: true, message: 'El precio unitario es obligatorio' }]}
                 label={index < 1 ? 'P. Unitario' : undefined}
                 layout="vertical"
               >
@@ -101,7 +96,6 @@ export const QuoteItemList = () => {
             <Col span={3}>
               <Form.Item
                 name={`quotation_item.${index}.supply_price`}
-                rules={[{ required: true, message: 'El precio de suministro es obligatorio' }]}
                 label={index < 1 ? 'P. Suministro' : undefined}
                 layout="vertical"
               >
@@ -112,7 +106,6 @@ export const QuoteItemList = () => {
             <Col span={3}>
               <Form.Item
                 name={`quotation_item.${index}.vat`}
-                rules={[{ required: true, message: 'El IVA es obligatorio' }]}
                 label={index < 1 ? 'IVA' : undefined}
                 layout="vertical"
               >

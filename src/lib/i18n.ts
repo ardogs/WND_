@@ -10,8 +10,8 @@ i18n
     .init({
         fallbackLng: 'es',
         debug: false, 
-        ns: ['common', 'settings'],
-        defaultNS: 'common',
+        ns: ['header', 'home', 'settings', 'common'],
+        defaultNS: 'header',
         interpolation: {
             escapeValue: false, 
         },
