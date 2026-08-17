@@ -108,13 +108,28 @@ const TableInner = <T extends Record<string, any>>({
                     onClick={rowProps.onClick}
                   >
                     {columns.map((col, colIdx) => {
-                      const value = col.dataIndex ? record[col.dataIndex] : undefined
-                      const primaryArg = value !== undefined ? value : record
-                      const cellContent = col.render
-                        ? col.render(primaryArg, record, index)
-                        : value !== undefined
-                        ? String(value)
-                        : null
+                      const dataIndexKey = col.dataIndex
+                      const hasDataIndex = dataIndexKey !== undefined && dataIndexKey !== null
+                      const value = hasDataIndex ? record[dataIndexKey as keyof T] : undefined
+                      const primaryArg = hasDataIndex ? value : record
+
+                      let cellContent: React.ReactNode = null
+                      if (typeof col.render === 'function') {
+                        cellContent = col.render(primaryArg, record, index)
+                      } else if (value !== undefined && value !== null) {
+                        cellContent = typeof value === 'object' ? JSON.stringify(value) : String(value)
+                      }
+
+                      // Prevenir error si un render o valor retorna un objeto que no es un elemento React válido
+                      if (
+                        cellContent !== null &&
+                        cellContent !== undefined &&
+                        typeof cellContent === 'object' &&
+                        !React.isValidElement(cellContent)
+                      ) {
+                        cellContent = String(cellContent)
+                      }
+
                       const alignClass =
                         col.align === 'right'
                           ? 'text-right'

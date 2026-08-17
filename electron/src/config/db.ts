@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export const connectDB = async (): Promise<boolean> => {
     try {
-        const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/wnd_db';
+        const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/WMD';
         await mongoose.connect(uri);
         console.log('📦 Conectado exitosamente a MongoDB');
         return true;

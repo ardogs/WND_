@@ -5,5 +5,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     maximize: () => ipcRenderer.send('maximize'),
     close: () => ipcRenderer.send('close'),
     getSystemInfo: () => ipcRenderer.invoke('get-system-info'),
-});
-// console.log('Preload cargado')
+    openFile: (filePath) => ipcRenderer.invoke('open-file', filePath),
+    showInFolder: (filePath) => ipcRenderer.invoke('show-in-folder', filePath),
+});

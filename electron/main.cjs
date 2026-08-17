@@ -1,5 +1,5 @@
 // electron/main.cjs
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
@@ -116,4 +116,35 @@ ipcMain.handle('get-system-info', () => {
         chromeVersion: process.versions.chrome,
     };
     return systemInfo;
+});
+
+// IPC Handlers para interactuar con archivos generados
+ipcMain.handle('open-file', async (_event, filePath) => {
+    try {
+        if (!filePath) {
+            return { success: false, error: 'Ruta de archivo no proporcionada' };
+        }
+        if (!fs.existsSync(filePath)) {
+            return { success: false, error: `El archivo no existe en: ${filePath}` };
+        }
+        const openResult = await shell.openPath(filePath);
+        if (openResult) {
+            return { success: false, error: openResult };
+        }
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err instanceof Error ? err.message : String(err) };
+    }
+});
+
+ipcMain.handle('show-in-folder', async (_event, filePath) => {
+    try {
+        if (!filePath || !fs.existsSync(filePath)) {
+            return { success: false, error: 'El archivo no existe en el sistema de archivos' };
+        }
+        shell.showItemInFolder(filePath);
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err instanceof Error ? err.message : String(err) };
+    }
 });
