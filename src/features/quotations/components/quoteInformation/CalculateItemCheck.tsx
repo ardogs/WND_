@@ -1,11 +1,12 @@
 import { Flex, Form, Text, Checkbox  } from "../../../../components/atoms"
 import { useFormList } from "../../hooks/quotationForm";
+import { QuotationFormType } from "../quoteForm/QuoteForm.data";
 import "./styles.scss";
 
 
 export const CalculateItemCheck = () => {
 
-    const form = Form.useFormInstance();
+    const form = Form.useFormInstance<QuotationFormType>();
 
     const { handleCheckBox, calculateSupplyPrice, calculateVatperItem } = useFormList({ form })
 

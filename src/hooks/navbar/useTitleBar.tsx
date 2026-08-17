@@ -1,82 +1,66 @@
-import { useNavigate, Link } from 'react-router-dom';
-import { MenuProps } from "antd";
-import logo from '../../assets/img/logo_2.webp';
-import { useTranslation } from 'react-i18next';
-import { ListdataSource } from '../../components/atoms/list/types';
-import { DarkModeSwitch } from '../../features/settings/components/settingsTabs/system/DarkModeSwitch';
-import { LanguageSelect } from '../../features/settings/components/settingsTabs/system/LanguageSelect';
+import { ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import logo from '../../assets/img/logo_2.webp'
+import { useTranslation } from 'react-i18next'
+
+export interface TitleBarMenuItem {
+  key: string
+  label: ReactNode
+  to?: string
+}
 
 export const useTitleBar = () => {
+  const { t } = useTranslation('header')
 
-    const { t } = useTranslation("header");
+  const menuItems: TitleBarMenuItem[] = [
+    {
+      label: t('quotations'),
+      to: '/quotations',
+      key: 'quotations',
+    },
+    {
+      label: t('invoices'),
+      to: '/invoices',
+      key: 'invoices',
+    },
+    {
+      label: t('companies'),
+      to: '/companies',
+      key: 'companies',
+    },
+  ]
 
-    type MenuItem = Required<MenuProps>['items'][number];
+  const navigate = useNavigate()
 
-    const menuItems: MenuItem[] = [
-        {
-            label: <Link to="/quotations"> {t("quotations")} </Link>,
-            key: 'quotations',
-        },
-        {
-            label: <Link to="/invoices"> {t("invoices")} </Link>,
-            key: 'invoices',
-        },
-        {
-            label: <Link to="/companies"> {t("companies")}</ Link >,
-            key: 'companies',
-        },
+  const handleMinimize = () => {
+    window?.electronAPI?.minimize?.()
+  }
 
-    ];
+  const handleMaximize = () => {
+    window?.electronAPI?.maximize?.()
+  }
 
-    const dataList: ListdataSource[] = [
-        {
-            title: t("dark_mode"),
-            action: <DarkModeSwitch />
-        },
-        {
-            title: t("language"),
-            action: <LanguageSelect />
-        },
-        {
-            title: t("setting"),
-            action: <Link to="/settings">{t("go")}</Link>,
-        },
-    ];
+  const handleClose = () => {
+    window?.electronAPI?.close?.()
+  }
 
-    const navigate = useNavigate();
+  const handleHome = () => {
+    navigate('/')
+  }
+  const handleGoBack = () => {
+    navigate(-1)
+  }
 
-    const handleMinimize = () => {
-        window?.electronAPI?.minimize?.();
-    }
+  return {
+    //Values
+    menuItems,
+    logo,
 
-    const handleMaximize = () => {
-        window?.electronAPI?.maximize?.()
-    }
-
-    const handleClose = () => {
-        window?.electronAPI?.close?.()
-    }
-
-    const handleHome = () => {
-        navigate('/')
-    }
-    const handleGoBack = () => {
-        navigate(-1)
-    }
-
-
-    return {
-        //Values
-        menuItems,
-        dataList,
-        titleList: t("quick_access"),
-        logo,
-
-        //Functions
-        handleMinimize,
-        handleMaximize,
-        handleClose,
-        handleHome,
-        handleGoBack
-    }
+    //Functions
+    handleMinimize,
+    handleMaximize,
+    handleClose,
+    handleHome,
+    handleGoBack,
+  }
 }

@@ -9,7 +9,8 @@ export const DarkModeSwitch = () => {
     return (
         <Switch isChecked={darkmode} loading={darkmodeisLoading}
             unCheckedChildren={<AiOutlineSun />} checkedChildren={<AiFillMoon />}
-            handleOnChange={handleDarkMode}
+            handleOnChange={(checked, _event, origin) => handleDarkMode(checked, origin)}
         />
     )
 }
+

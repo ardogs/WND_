@@ -2,9 +2,7 @@ import { useEffect } from "react";
 import { FormInstance } from "../../components/atoms"
 import { useCompanies } from "../companies";
 import { QuotationFormType } from "../../features/quotations/components/quoteForm/QuoteForm.data";
-// import { CompanyDataSelectorType } from "../../components/organisms/companyDataSelector/types";
 import { Company } from "../../features/companies/types";
-
 
 interface Props {
     quotationForm?: FormInstance<QuotationFormType>
@@ -12,9 +10,9 @@ interface Props {
 }
 
 export const useCompanyDataForm = ({ quotationForm, companyDataSelectorForm }: Props) => {
-
     const { companyData, registration_number_id } = useCompanies();
-    const data = companyData.find( element => element.registration_number === registration_number_id  )
+    const selectedId = registration_number_id || (companyData[0]?.registration_number ?? '');
+    const data = companyData.find(element => element.registration_number === selectedId) || companyData[0];
 
     useEffect(() => {
         if (quotationForm === undefined || !data)
@@ -47,6 +45,4 @@ export const useCompanyDataForm = ({ quotationForm, companyDataSelectorForm }: P
             website: data.website
         })
     }, [companyDataSelectorForm, data])
-
-
 }

@@ -1,18 +1,23 @@
+import { ListdataSource } from './types'
+import { cn } from '@/lib/utils'
 
-import { List as AntList } from 'antd';
-import './styles.scss';
-import { ListdataSource } from './types';
-
-interface Props {
-    data: ListdataSource[]
+export interface ListProps {
+  data: ListdataSource[]
+  className?: string
 }
 
-export const List = ({ data }: Props) => (
-    <AntList
-        itemLayout="horizontal" dataSource={data} renderItem={(item) => (
-            <AntList.Item actions={item.action ? [item.action] : []} >
-                <AntList.Item.Meta title={item.title} />
-            </AntList.Item>
-        )}
-    />
-);
+export const List = ({ data, className }: ListProps) => {
+  return (
+    <div className={cn('divide-y divide-border/50', className)}>
+      {data.map((item, index) => (
+        <div
+          key={index}
+          className="flex items-center justify-between py-2.5 px-1 text-sm transition-colors hover:bg-muted/40 rounded-md"
+        >
+          <span className="font-medium text-foreground text-xs">{item.title}</span>
+          {item.action && <div className="flex-shrink-0">{item.action}</div>}
+        </div>
+      ))}
+    </div>
+  )
+}

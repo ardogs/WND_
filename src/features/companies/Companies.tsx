@@ -1,12 +1,10 @@
-import { Outlet } from 'react-router-dom';
-import { Title } from '../../components/atoms';
-import { AnimatedPage } from '../../components/layout';
+import { Outlet } from 'react-router-dom'
+import { AnimatedPage } from '../../components/layout'
 
 export const Companies = () => {
   return (
     <AnimatedPage>
-      <div className='quotationsDiv'>
-        <Title level={1} text="Mis empresas" style={{ marginBottom: "25px" }} />
+      <div className="w-full">
         <Outlet />
       </div>
     </AnimatedPage>

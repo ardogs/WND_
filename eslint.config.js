@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'electron/dist'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -19,6 +19,8 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
@@ -26,23 +28,24 @@ export default tseslint.config(
       'no-restricted-imports': [
         'error',
         {
-          paths: [{
-            name: 'antd',
-            message: "Direct import of 'antd' is prohibited. Please use the wrapper components defined in 'src/components/'."
-          }],
-          patterns: [{
-            group: ['antd/*'],
-            message: "Deep import of 'antd' is prohibited. Please use the wrapper components defined in 'src/components/'."
-          }]
-        }
-      ]
-    },
-  },
-
-  {
-    files: ["src/components/**/*.{ts,tsx}", "src/providers/**/*.{ts,tsx}", "src/hooks/**/*.{ts,tsx}"],
-    rules: {
-      'no-restricted-imports': 'off',
+          paths: [
+            {
+              name: 'antd',
+              message: "Ant Design has been completely removed. Use shadcn/ui and Tailwind CSS components.",
+            },
+            {
+              name: '@ant-design/icons',
+              message: "Ant Design Icons have been removed. Use lucide-react or react-icons.",
+            },
+          ],
+          patterns: [
+            {
+              group: ['antd/*', '@ant-design/*'],
+              message: "Ant Design has been completely removed. Use shadcn/ui and Tailwind CSS components.",
+            },
+          ],
+        },
+      ],
     },
   }
 )

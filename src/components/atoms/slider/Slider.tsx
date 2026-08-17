@@ -1,19 +1,43 @@
-import { Slider as AntSlider } from 'antd';
-import type { SliderSingleProps } from 'antd/es/slider';
-// import { div } from 'framer-motion/client';
+import { Slider as ShadcnSlider } from '@/components/ui/slider'
+import { cn } from '@/lib/utils'
 
-
-interface Props extends Omit<SliderSingleProps, 'min' | 'max'> {
-    min: number,
-    max: number,
-    value: number
-    handleChange: (size: number) => void
+export interface SliderProps {
+  min: number
+  max: number
+  value: number
+  handleChange?: (val: number) => void
+  onChange?: (val: number) => void
+  step?: number
+  disabled?: boolean
+  className?: string
 }
 
-export const Slider = ({ min, max, value, handleChange }: Props) => {
-    return (
-        <div style={{ width: "80%", margin: "0 15px" }}>
-            <AntSlider min={min} max={max} onChange={handleChange} value={value}/>
-        </div>
-    )
+export const Slider = ({
+  min,
+  max,
+  value,
+  handleChange,
+  onChange,
+  step = 1,
+  disabled = false,
+  className,
+}: SliderProps) => {
+  const onValueChange = (vals: number[]) => {
+    const val = vals[0]
+    handleChange?.(val)
+    onChange?.(val)
+  }
+
+  return (
+    <div className={cn('w-full my-1 flex items-center', className)}>
+      <ShadcnSlider
+        min={min}
+        max={max}
+        step={step}
+        value={[value]}
+        onValueChange={onValueChange}
+        disabled={disabled}
+      />
+    </div>
+  )
 }

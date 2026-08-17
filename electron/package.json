@@ -1,0 +1,5 @@
+{
+  "name": "wnd-electron",
+  "private": true,
+  "type": "commonjs"
+}

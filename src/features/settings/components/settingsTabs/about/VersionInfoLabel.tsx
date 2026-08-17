@@ -1,17 +1,16 @@
-// import { Flex } from 'antd'
-// import React from 'react'
 import { Flex, Text } from '../../../../../components/atoms'
-import "./styles.scss"
+import './styles.scss'
 
 interface Props {
-    title: string,
-    version: string
+  title: string
+  version: string
 }
+
 export const VersionInfoLabel = ({ title, version }: Props) => {
-    return (
-        <Flex  vertical align='center' justify='center' className='VersionInfoLabel' gap={5}>
-            <Text type="secondary"description={title} />
-            <Text  description={version} />
-        </Flex>
-    )
+  return (
+    <Flex justify="space-between" align="center" className="w-full">
+      <Text type="secondary" description={title} />
+      <span className="about-badge font-mono">{version}</span>
+    </Flex>
+  )
 }

@@ -1,3 +1,6 @@
-import type { CheckboxChangeEvent } from 'antd';
-
-export {CheckboxChangeEvent};
+export interface CheckboxChangeEvent {
+  target: {
+    checked: boolean
+    name?: string
+  }
+}

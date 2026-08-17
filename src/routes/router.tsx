@@ -73,9 +73,20 @@ export const router = createBrowserRouter([
                                 path: "",
                                 Component: CompaniesHome
                             },
-
                             {
                                 path: "companiesForm/:mode/:registration_number",
+                                Component: CompaniesForm
+                            },
+                            {
+                                path: "companiesForm/:mode",
+                                Component: CompaniesForm
+                            },
+                            {
+                                path: "companiesForm",
+                                Component: CompaniesForm
+                            },
+                            {
+                                path: ":mode/:registration_number",
                                 Component: CompaniesForm
                             }
                         ]

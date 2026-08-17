@@ -2,6 +2,7 @@ import { create } from "zustand";
 import i18n from '../../lib/i18n';
 import { fetchAppSettingsAPI, isConnectedAPI, setDarkModeAPI, apiLogin, setAPIUrl, setFontsize, setLanguage } from "../../api/settings";
 import { useAuthStore } from "./useAuthStore";
+import { executeThemeTransition, ThemeTransitionOrigin } from "../../helpers/themeTransition";
 
 interface SettingsState {
     darkmode: boolean,
@@ -32,7 +33,7 @@ interface SettingsState {
 }
 
 interface SettingsActions {
-    setDarkMode: (flag: boolean) => void
+    setDarkMode: (flag?: boolean, origin?: ThemeTransitionOrigin) => Promise<void>
     changeLanguage: (langauge: string) => void
     setAPIURL: (url: string) => void,
     setTokenAPI: (pwd: string) => void,
@@ -85,17 +86,34 @@ export const useSettingsStore = create<SettingsState & SettingsActions>((set, ge
         }
     },
 
-    setDarkMode: async () => {
-        set({ darkmodeisLoading: true, error: "" })
-        try {
+    setDarkMode: async (flag?: boolean, origin?: ThemeTransitionOrigin) => {
+        const currentMode = get().darkmode;
+        const nextMode = flag !== undefined ? flag : !currentMode;
+        if (currentMode === nextMode) return;
 
-            const currentMode = get().darkmode;
-            // console.log(!currentMode)
-            await setDarkModeAPI(!currentMode, get().apiToken);
-            set((state) => ({ darkmode: !state.darkmode, darkmodeisLoading: false }))
+        // Perform animated view transition and state update immediately
+        executeThemeTransition(
+            nextMode,
+            () => {
+                set({ darkmode: nextMode });
+            },
+            origin
+        );
+
+        // Persist setting to backend API in background
+        set({ darkmodeisLoading: true, error: "" });
+        try {
+            await setDarkModeAPI(nextMode, get().apiToken);
+            set({ darkmodeisLoading: false });
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
-            set({ error: errorMessage, darkmodeisLoading: false });
+            // Revert on error
+            executeThemeTransition(
+                currentMode,
+                () => {
+                    set({ darkmode: currentMode, darkmodeisLoading: false, error: errorMessage });
+                }
+            );
         }
     },
 

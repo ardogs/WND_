@@ -1,4 +1,4 @@
-import { Form } from 'antd';
+import { Form } from '../../components/atoms'
 import { useState } from 'react'
 
 export const usePopConfirmation = (next: () => void) => {

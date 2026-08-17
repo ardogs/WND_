@@ -1,23 +1,20 @@
-
-// import { AiOutlineDelete, AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
-import { TableProps } from "../../../../components/atoms/table/types";
-import { AnimatedPage } from "../../../../components/layout";
-import { Flex, Table } from "../../../../components/atoms";
-import { TitleWithDescription } from "../../../../components/molecules";
-import { Outlet } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
-import { useCompaniesStore } from "../../../../store/companies/useCompaniesStore";
+import { ColumnsType } from '../../../../components/atoms/table/types'
+import { AnimatedPage } from '../../../../components/layout'
+import { Flex, Table } from '../../../../components/atoms'
+import { TitleWithDescription } from '../../../../components/molecules'
+import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { AiOutlineEdit, AiOutlineEye } from 'react-icons/ai'
+import { useCompaniesStore } from '../../../../store/companies/useCompaniesStore'
 
 interface DataType {
-  key: string;
-  registrationNumber: string;
-  comercialName: string;
-  legalRepresentative: string;
+  key: string
+  registrationNumber: string
+  comercialName: string
+  legalRepresentative: string
 }
 
-const columns: TableProps['columns'] = [
+const columns: ColumnsType<DataType> = [
   {
     title: 'Número de registro',
     dataIndex: 'registrationNumber',
@@ -27,6 +24,7 @@ const columns: TableProps['columns'] = [
     title: 'Nombre comercial',
     dataIndex: 'comercialName',
     key: 'comercialName',
+    render: (text) => <span className="font-semibold text-foreground">{text}</span>,
   },
   {
     title: 'Representante Legal',
@@ -34,29 +32,35 @@ const columns: TableProps['columns'] = [
     key: 'legalRepresentative',
   },
   {
-    title: 'Actions',
+    title: 'Acciones',
     key: 'action',
-    render: (record: DataType) => (
+    align: 'center',
+    render: (_: any, record: DataType) => {
+      const regNum = record?.registrationNumber || ''
+      return (
+        <Flex gap={16} justify="center">
+          <Link to={`/companies/companiesForm/view/${regNum}`}>
+            <AiOutlineEye
+              className="cursor-pointer text-muted-foreground hover:text-primary transition-colors text-base"
+              title="Ver detalles"
+            />
+          </Link>
 
-      <Flex gap={20}>
-        <Link to={`companiesForm/view/${record.registrationNumber}`}>
-          <AiOutlineEye style={{ cursor: 'pointer', }} title="Ver detalles" />
-        </Link>
-
-        <Link to={`companiesForm/edit/${record.registrationNumber}`}>
-          <AiOutlineEdit style={{ cursor: 'pointer', }} title="Editar registro" />
-        </Link>
-      </Flex>
-    ),
-
+          <Link to={`/companies/companiesForm/edit/${regNum}`}>
+            <AiOutlineEdit
+              className="cursor-pointer text-muted-foreground hover:text-primary transition-colors text-base"
+              title="Editar registro"
+            />
+          </Link>
+        </Flex>
+      )
+    },
   },
-];
+]
 
 export const Home = () => {
-
-  const companyData = useCompaniesStore( state => state.companyData ) 
+  const companyData = useCompaniesStore((state) => state.companyData)
   const [data, setData] = useState<DataType[] | undefined>()
-
 
   useEffect(() => {
     const dataTable = companyData.map((item) => ({
@@ -64,20 +68,28 @@ export const Home = () => {
       registrationNumber: item.registration_number,
       comercialName: item.comercial_name,
       legalRepresentative: item.legal_representative,
-    }));
+    }))
 
     setData(dataTable)
   }, [companyData])
 
   return (
     <AnimatedPage>
-      <div>
+      <div className="space-y-6">
         <Flex align="end" justify="space-between">
-          <TitleWithDescription title="¡Bienvenido!" description="Por favor, selecciona una opción para iniciar" />
+          <TitleWithDescription
+            title="Mis Empresas"
+            description="Gestiona y consulta las empresas y proveedores registrados"
+          />
         </Flex>
 
-        <Outlet />
-        <Table columns={columns} dataSource={data} pagination={false} style={{ marginTop: "50px", marginBottom: "60px" }} scroll={{ y: 500 }} />
+        <div className="mt-4">
+          <Table
+            columns={columns}
+            dataSource={data}
+            pagination={false}
+          />
+        </div>
       </div>
     </AnimatedPage>
   )

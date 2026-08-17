@@ -1,30 +1,46 @@
-// import { ReactNode } from 'react';
-import { Flex } from 'antd';
-
-import { IconButton, List } from '../../atoms';
-import { IconButtonMenu } from '../iconButtonMenu';
-import { ListdataSource } from '../../atoms/list/types';
-import { AiOutlineSetting, AiOutlineMinus, AiOutlineBorder, AiOutlineClose } from 'react-icons/ai';
-
-import './styles.scss'
-
+import { IconButton, Flex } from '../../atoms'
+import { IconButtonMenu } from '../iconButtonMenu'
+import { ListdataSource } from '../../atoms/list/types'
+import { Minus, Square, X } from 'lucide-react'
 
 interface Props {
-    handleMinimize: () => void
-    handleMaximize: () => void
-    handleClose: () => void
-    content: ListdataSource[],
-    title: string
+  handleMinimize: () => void
+  handleMaximize: () => void
+  handleClose: () => void
+  content?: ListdataSource[]
+  title?: string
 }
 
-export const ControlButtons = ({ handleMinimize, handleMaximize, handleClose, content, title }: Props) => {
-    return (
-        <Flex className="borderLeft control-button-div" justify='center' align='center' >
-            <IconButtonMenu icon={<AiOutlineSetting />} content={<List data={content} />} title={ title } />
-            <IconButton icon={<AiOutlineMinus />} className="white" onClick={handleMinimize} />
-            <IconButton icon={<AiOutlineBorder />} className="white" onClick={handleMaximize} />
-            <IconButton icon={<AiOutlineClose />} className="red" onClick={handleClose} />
-        </Flex>
-    )
+export const ControlButtons = ({
+  handleMinimize,
+  handleMaximize,
+  handleClose,
+}: Props) => {
+  return (
+    <Flex
+      align="center"
+      justify="center"
+      className="border-l border-border/60 pl-2 ml-2 gap-1"
+    >
+      <IconButtonMenu />
+      <IconButton
+        icon={<Minus className="w-3.5 h-3.5" />}
+        className="white"
+        onClick={handleMinimize}
+        title="Minimizar"
+      />
+      <IconButton
+        icon={<Square className="w-3.5 h-3.5" />}
+        className="white"
+        onClick={handleMaximize}
+        title="Maximizar"
+      />
+      <IconButton
+        icon={<X className="w-4 h-4" />}
+        className="red"
+        onClick={handleClose}
+        title="Cerrar"
+      />
+    </Flex>
+  )
 }
-

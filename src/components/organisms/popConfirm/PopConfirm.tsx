@@ -1,21 +1,64 @@
-import { Popconfirm as AntPopConfirm, PopconfirmProps } from 'antd'
-import { Button } from '../../atoms';
-import { usePopConfirmation } from '../../../hooks/popConfirmation/usePopConfirmation';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { Button } from '../../atoms'
+import { usePopConfirmation } from '../../../hooks/popConfirmation/usePopConfirmation'
+import { cn } from '@/lib/utils'
 
-interface Props extends Omit<PopconfirmProps, 'title' | 'description'> {
-    title: string,
-    description: string,
-    buttonText: string,
-    next?: () => void
-
+export interface PopConfirmProps {
+  title: string
+  description: string
+  buttonText: string
+  next?: () => void
+  okText?: string
+  cancelText?: string
+  className?: string
 }
 
-export const PopConfirm = ({ title, description, buttonText, next, ...rest }: Props) => {
-    
-    const { handleOk, handleCancel, open, showPopconfirm } = usePopConfirmation(next ?? (() => {}))
-    return (
-        <AntPopConfirm title={title} description={description} open={open} onConfirm={handleOk} onCancel={handleCancel} {...rest}>
-            <Button type="primary" onClick={showPopconfirm} text={buttonText}> </Button>
-        </AntPopConfirm>
-    )
+export const PopConfirm = ({
+  title,
+  description,
+  buttonText,
+  next,
+  okText = 'Confirmar',
+  cancelText = 'Cancelar',
+  className,
+}: PopConfirmProps) => {
+  const { handleOk, handleCancel, open, showPopconfirm } = usePopConfirmation(
+    next ?? (() => {})
+  )
+
+  return (
+    <>
+      <Button
+        type="primary"
+        onClick={showPopconfirm}
+        text={buttonText}
+        className={cn('min-w-[140px]', className)}
+      />
+      <AlertDialog open={open} onOpenChange={(isOpen) => !isOpen && handleCancel()}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{title}</AlertDialogTitle>
+            <AlertDialogDescription>{description}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancel}>
+              {cancelText}
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleOk}>
+              {okText}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  )
 }

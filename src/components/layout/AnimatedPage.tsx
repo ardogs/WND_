@@ -10,8 +10,15 @@ const animations = {
 
 export const AnimatedPage = ({ children }: { children: React.ReactNode }) => {
     return (
-        <motion.div variants={animations} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.3 }} className='animatedPage'>
+        <motion.div
+            variants={animations}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+            className='animatedPage w-full h-full flex-1 flex flex-col min-h-0'
+        >
             {children}
         </motion.div>
     );
-};
+};

@@ -1,6 +1,51 @@
-.VersionInfoLabel {
-    margin: 10px 0;
+.about-card {
+  width: 100%;
+  max-width: 680px;
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
 }
-.copyright{
-    margin-top: 100px !important;
+
+.about-logo-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.about-spec-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background-color: hsl(var(--secondary) / 0.4);
+  border: 1px solid hsl(var(--border) / 0.6);
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: hsl(var(--secondary) / 0.7);
+  }
+}
+
+.about-icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border) / 0.8);
+  color: hsl(var(--primary));
+  flex-shrink: 0;
 }

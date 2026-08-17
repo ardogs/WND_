@@ -1,22 +1,15 @@
 .settings-card-content {
-    min-height: 70px;
-    max-height: fit-content;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #D9D9D9;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-width: 55%;
-    // width: 60%;
-    max-width:  80%;
-    
-    padding: 15px 18px;
-    margin-bottom: 15px;
-    margin-left: 5%;
-    .ant-typography {
-        margin: 0;
-    }
+  min-height: 70px;
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 680px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  gap: 16px;
 }
-

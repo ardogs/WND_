@@ -1,33 +1,37 @@
-import { ReactNode } from 'react'
-import { ConfigProvider, theme } from 'antd';
-import { lightTheme, darkTheme } from './theme';
-import { useSettingsStore } from '../../store/settings/useSettingStore';
-import { App } from '../../components/atoms';
+import { ReactNode, useEffect } from 'react'
+import { useSettingsStore } from '../../store/settings/useSettingStore'
+import { Toaster } from '@/components/ui/sonner'
 
 interface Props {
-    children: ReactNode
+  children: ReactNode
 }
 
 export const ThemeProvider = ({ children }: Props) => {
+  const darkmode = useSettingsStore((state) => state.darkmode)
+  const fontSize = useSettingsStore((state) => state.fontSize)
 
-    const darkmode = useSettingsStore((state) => state.darkmode)
-    const fontSize = useSettingsStore((state) => state.fontSize)
+  useEffect(() => {
+    const root = document.documentElement
+    if (darkmode) {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+  }, [darkmode])
 
-    const baseTheme = !darkmode ? lightTheme : darkTheme;
-    const finalTheme = {
-        ...baseTheme,
-        token: {
-            ...baseTheme.token,
-            fontSize: fontSize,
-        },
-    };
-    
-    const algorithm = darkmode ? theme.darkAlgorithm : theme.defaultAlgorithm;
-    return (
-        <ConfigProvider theme={{ ...finalTheme, algorithm }} >
-            <App>
-                {children}
-            </App>
-        </ConfigProvider>
-    )
+  useEffect(() => {
+    document.documentElement.style.fontSize = `${fontSize}px`
+  }, [fontSize])
+
+  return (
+    <div
+      id="wnd-theme-root"
+      className="h-full w-full bg-background text-foreground"
+      style={{ fontSize: `${fontSize}px` }}
+    >
+      {children}
+      <Toaster position="top-right" richColors closeButton />
+    </div>
+  )
 }
+

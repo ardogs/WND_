@@ -1,66 +1,72 @@
-
-import { useParams } from "react-router-dom"
-// import { CompanyDataSelectorType, companyDataSelectorMode } from '../../../../components/organisms/companyDataSelector/types';
-import { Flex, Form, Button, App } from "../../../../components/atoms";
-import { CompanyDataSelector } from "../../../../components/organisms"
-import { useCompanies, useCompanyDataForm, useTitleBar } from "../../../../hooks";
-import { TitleWithDescription } from "../../../../components/molecules";
-import { AnimatedPage } from "../../../../components/layout";
-import { useCompaniesForm } from "../../hooks/useCompaniesForm";
-import { Company, companyDataSelectorMode } from '../../types';
-// import { App } from 'antd';
-
-
+import { useParams } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Flex, Form, Button } from '../../../../components/atoms'
+import { CompanyDataSelector } from '../../../../components/organisms'
+import { useCompanies, useCompanyDataForm, useTitleBar } from '../../../../hooks'
+import { TitleWithDescription } from '../../../../components/molecules'
+import { AnimatedPage } from '../../../../components/layout'
+import { useCompaniesForm } from '../../hooks/useCompaniesForm'
+import { Company, companyDataSelectorMode } from '../../types'
+import { companySchema } from '../../schemas/company.schema'
 
 export const CompaniesForm = () => {
-    const { message } = App.useApp()
-    const { mode, registration_number } = useParams();
-    const { handleGoBack } = useTitleBar();
-    const {updateSupplier} =  useCompanies()
-    const [form] = Form.useForm<Company>();
-    useCompaniesForm(registration_number!);
-    useCompanyDataForm({ companyDataSelectorForm: form })
+  const { mode = 'view', registration_number } = useParams()
+  const { handleGoBack } = useTitleBar()
+  const { updateSupplier, companyData } = useCompanies()
 
-    const handleOnFinish = async (values: Company) => {
-        const success = await updateSupplier(values)
-        console.log(success)
+  const activeMode: companyDataSelectorMode =
+    mode === 'edit' ? 'edit' : mode === 'default' ? 'default' : 'view'
+  const activeRegNumber =
+    registration_number || companyData[0]?.registration_number || ''
 
-        if (success) {
-            console.log("mensaje d exito")
-            message.success({
-                content: 'Empresa actualizada correctamente',
-                duration: 3,
-            });
-            handleGoBack()
-        } else {
-            message.error({
-                content: 'Hubo un error al procesar la solicitud',
-                duration: 4,
-            });
-        }
+  const [form] = Form.useForm<Company>({
+    resolver: zodResolver(companySchema) as any,
+  })
+
+  useCompaniesForm(activeRegNumber)
+  useCompanyDataForm({ companyDataSelectorForm: form })
+
+  const handleOnFinish = async (values: Company) => {
+    const success = await updateSupplier(values)
+    if (success) {
+      handleGoBack()
     }
+  }
 
-    return (
-        <AnimatedPage>
-            <div>
-                <Flex align="end" justify="space-between">
-                    {
-                        (mode === 'edit')
-                            ? <TitleWithDescription title="Editar empresa" description="Edita la información de la empresa seleccionada" />
-                            : <TitleWithDescription title="Información de tu empresa" description="Muestra información detallada de la empresa seleccionada" />
-                    }
-                </Flex>
+  return (
+    <AnimatedPage>
+      <div className="space-y-6">
+        <Flex align="end" justify="space-between">
+          {activeMode === 'edit' ? (
+            <TitleWithDescription
+              title="Editar empresa"
+              description="Edita la información de la empresa seleccionada"
+            />
+          ) : (
+            <TitleWithDescription
+              title="Información de tu empresa"
+              description="Muestra información detallada de la empresa seleccionada"
+            />
+          )}
+        </Flex>
 
-                <Form form={form} style={{ marginTop: "50px", marginBottom: "60px" }} onFinish={handleOnFinish}>
-                    <CompanyDataSelector mode={mode as companyDataSelectorMode}  defaultValue={registration_number} />
-                    <Flex justify="center" align="center" gap={10} style={{ marginTop: '40px' }}>
-                        <Button type="default" text="Volver" onClick={handleGoBack} />
-                        {(mode === 'edit') && <Button type="primary" htmlType='submit' text="Actualizar" />}
-                    </Flex>
-                </Form>
-            </div>
-        </AnimatedPage>
-
-
-    )
+        <Form
+          form={form}
+          className="mt-6 mb-8"
+          onFinish={handleOnFinish}
+        >
+          <CompanyDataSelector
+            mode={activeMode}
+            defaultValue={activeRegNumber}
+          />
+          <Flex justify="center" align="center" gap={12} className="mt-8">
+            <Button type="default" text="Volver" onClick={handleGoBack} />
+            {activeMode === 'edit' && (
+              <Button type="primary" htmlType="submit" text="Actualizar" />
+            )}
+          </Flex>
+        </Form>
+      </div>
+    </AnimatedPage>
+  )
 }

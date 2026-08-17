@@ -1,10 +1,31 @@
-// electron/main.js
+// electron/main.cjs
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const os = require('os');
+const fs = require('fs');
+const dotenv = require('dotenv');
 
 // Detecta si estamos en modo de desarrollo
 const isDev = process.env.NODE_ENV !== 'production';
+
+// Carga de variables de entorno (.env)
+const envPath = isDev 
+    ? path.join(__dirname, '../.env') 
+    : path.join(process.resourcesPath, '.env');
+
+if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+} else {
+    dotenv.config({ path: path.join(__dirname, '../.env') });
+}
+
+// Importar el backend compilado de Express
+let serverModule = null;
+try {
+    serverModule = require('./dist/server.js');
+} catch (err) {
+    console.warn('⚠️ electron/dist/server.js no encontrado o falló al cargar. Compila con npm run build:server.', err.message);
+}
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -12,14 +33,10 @@ function createWindow() {
         height: 800,
         minHeight: 1000,
         minWidth: 1500,
-        // backgroundMaterial: 'acrylic',
-        // transparent: true,
-        // blur: true,
         frame: false,
         webPreferences: {
-
             preload: path.join(__dirname, 'preload.js'), 
-            nodeIntegration: true, 
+            nodeIntegration: false, 
             contextIsolation: true,
         },
         autoHideMenuBar: true,
@@ -30,16 +47,34 @@ function createWindow() {
     // Si estamos en desarrollo, carga la URL del servidor de Vite.
     // Si estamos en producción, carga el archivo index.html compilado.
     if (isDev) {
-        win.loadURL('http://localhost:5173'); // Puerto por defecto de Vite
-        // win.webContents.openDevTools(); // Abre las herramientas de desarrollador
+        win.loadURL('http://localhost:5173');
     } else {
         win.loadFile(path.join(__dirname, '../dist/index.html'));
     }
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+    // Inicializar servidor Express en segundo plano
+    if (serverModule && typeof serverModule.startServer === 'function') {
+        try {
+            await serverModule.startServer();
+            console.log('✅ Servidor Express backend inicializado en Electron');
+        } catch (error) {
+            console.error('❌ Error al iniciar el servidor Express backend:', error);
+        }
+    }
 
-app.on('window-all-closed', () => {
+    createWindow();
+});
+
+app.on('window-all-closed', async () => {
+    if (serverModule && typeof serverModule.stopServer === 'function') {
+        try {
+            await serverModule.stopServer();
+        } catch (error) {
+            console.error('Error al detener servidor:', error);
+        }
+    }
     if (process.platform !== 'darwin') {
         app.quit();
     }
@@ -49,17 +84,17 @@ app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
+// IPC Handlers existentes
 ipcMain.on('minimize', () => {
-    console.log('Minimize')
     BrowserWindow.getFocusedWindow()?.minimize();
 });
 
 ipcMain.on('maximize', () => {
     const win = BrowserWindow.getFocusedWindow();
-    if (win.isMaximized()) {
+    if (win?.isMaximized()) {
         win.unmaximize();
     } else {
-        win.maximize();
+        win?.maximize();
     }
 });
 
@@ -68,18 +103,17 @@ ipcMain.on('close', () => {
 });
 
 ipcMain.handle('get-system-info', () => {
-    // Recopilamos la información que necesitamos del módulo 'os'
     const systemInfo = {
-        platform: os.platform(), // 'win32', 'darwin' (macOS), 'linux'
-        release: os.release(),   // Versión del S.O.
-        arch: os.arch(),         // 'x64', 'arm64', etc.
-        cpuModel: os.cpus()[0].model, // Modelo del primer núcleo de CPU
-        cpuCores: os.cpus().length,   // Número de núcleos
-        totalMemory: (os.totalmem() / 1024 / 1024 / 1024).toFixed(2), // Memoria total en GB
-        freeMemory: (os.freemem() / 1024 / 1024 / 1024).toFixed(2),   // Memoria libre en GB
-        userInfo: os.userInfo(),     // Información del usuario (username, home dir)
-        electronVersion: process.versions.electron, // Versión de Electron
-        chromeVersion: process.versions.chrome,     // Versión de Chromium
+        platform: os.platform(),
+        release: os.release(),
+        arch: os.arch(),
+        cpuModel: os.cpus()[0]?.model || 'Unknown',
+        cpuCores: os.cpus().length,
+        totalMemory: (os.totalmem() / 1024 / 1024 / 1024).toFixed(2),
+        freeMemory: (os.freemem() / 1024 / 1024 / 1024).toFixed(2),
+        userInfo: os.userInfo(),
+        electronVersion: process.versions.electron,
+        chromeVersion: process.versions.chrome,
     };
     return systemInfo;
 });

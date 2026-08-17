@@ -1,14 +1,90 @@
-import { Select as AntSelect } from 'antd';
-import { DefaultOptionType, SelectProps } from 'antd/es/select';
-import "./styles.scss"
+import React from 'react'
+import {
+  Select as ShadcnSelect,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select'
+import { DefaultOptionType } from './types'
+import { cn } from '@/lib/utils'
 
-interface Props extends SelectProps{
-    handleChange: (param: string) => void,
-    option: DefaultOptionType[]
-    defaultValue: string
+export interface SelectProps {
+  handleChange?: (val: string) => void
+  onChange?: (val: string) => void
+  option?: DefaultOptionType[]
+  options?: DefaultOptionType[]
+  defaultValue?: string
+  value?: string
+  disabled?: boolean
+  loading?: boolean
+  placeholder?: string
+  className?: string
+  size?: 'small' | 'middle' | 'large'
 }
 
+export const Select = ({
+  handleChange,
+  onChange,
+  option,
+  options,
+  defaultValue,
+  value,
+  disabled = false,
+  placeholder = 'Seleccionar...',
+  className,
+}: SelectProps) => {
+  const items = option || options || []
+  const [currentVal, setCurrentVal] = React.useState<string>(value || defaultValue || '')
 
-export const Select = ({ handleChange, option, defaultValue, ...rest }: Props) => {
-    return <AntSelect size="middle" defaultValue={defaultValue} onChange={handleChange} options={option} {...rest} className='select'/>
+  React.useEffect(() => {
+    if (value !== undefined) {
+      setCurrentVal(value)
+    } else if (defaultValue !== undefined && !currentVal) {
+      setCurrentVal(defaultValue)
+    }
+  }, [value, defaultValue, currentVal])
+
+  const onValueChange = (newVal: string) => {
+    setCurrentVal(newVal)
+    handleChange?.(newVal)
+    onChange?.(newVal)
+  }
+
+  const validItems = items.filter(
+    (item) =>
+      item &&
+      item.value !== undefined &&
+      item.value !== null &&
+      String(item.value).trim() !== ''
+  )
+
+  return (
+    <ShadcnSelect
+      value={currentVal ? String(currentVal) : undefined}
+      onValueChange={onValueChange}
+      disabled={disabled}
+    >
+      <SelectTrigger className={cn('w-full bg-background', className)}>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        {validItems.length > 0 ? (
+          validItems.map((item) => (
+            <SelectItem
+              key={String(item.value)}
+              value={String(item.value)}
+              disabled={item.disabled}
+            >
+              {item.label}
+            </SelectItem>
+          ))
+        ) : (
+          <SelectItem value="_empty" disabled>
+            Sin opciones
+          </SelectItem>
+        )}
+      </SelectContent>
+    </ShadcnSelect>
+  )
 }
