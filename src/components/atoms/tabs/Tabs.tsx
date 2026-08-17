@@ -75,6 +75,7 @@ export const Tabs = ({
           const isActive = current === item.key
           return (
             <button
+              type="button"
               key={item.key}
               role="tab"
               aria-selected={isActive}

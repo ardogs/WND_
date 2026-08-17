@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ApiErrorResponse } from "../api/types";
 import { Company } from "../features/companies/types";
+import { getDefaultQuotationFieldsConfig, getDefaultExcelMappingConfig } from "../features/companies/constants/quotationFields.config";
 
 /**
  * Formats a numerical or string value into South Korean Won (KRW) currency format.
@@ -58,6 +59,30 @@ export const formatDateToDisplay = (dateInput: string | Date | undefined | null)
  */
 export const extractCompanyFormValues = (company: Partial<Company> | undefined | null) => {
     if (!company) return {};
+    const defaultConfig = getDefaultQuotationFieldsConfig();
+    let existingConfig: Record<string, boolean> = {};
+    if (typeof company.quotation_fields_config === 'string') {
+        try {
+            existingConfig = JSON.parse(company.quotation_fields_config);
+        } catch {
+            existingConfig = {};
+        }
+    } else if (company.quotation_fields_config && typeof company.quotation_fields_config === 'object') {
+        existingConfig = company.quotation_fields_config;
+    }
+
+    const defaultExcelMapping = getDefaultExcelMappingConfig();
+    let existingExcelMapping: Record<string, string> = {};
+    if (typeof company.quotation_excel_mapping === 'string') {
+        try {
+            existingExcelMapping = JSON.parse(company.quotation_excel_mapping);
+        } catch {
+            existingExcelMapping = {};
+        }
+    } else if (company.quotation_excel_mapping && typeof company.quotation_excel_mapping === 'object') {
+        existingExcelMapping = company.quotation_excel_mapping;
+    }
+
     return {
         registration_number: company.registration_number || '',
         comercial_name: company.comercial_name || '',
@@ -68,6 +93,14 @@ export const extractCompanyFormValues = (company: Partial<Company> | undefined |
         tel_fax: company.tel_fax || '',
         website: company.website || '',
         img: company.img || '',
+        quotation_fields_config: {
+            ...defaultConfig,
+            ...existingConfig,
+        },
+        quotation_excel_mapping: {
+            ...defaultExcelMapping,
+            ...existingExcelMapping,
+        },
     };
 };
 

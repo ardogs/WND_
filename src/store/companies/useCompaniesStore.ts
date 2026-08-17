@@ -48,11 +48,16 @@ export const useCompaniesStore = create<Companies & CompanyActions>((set, get) =
     },
 
     updateSupplier: async (data: Company) => {
-        const token = useAuthStore.getState().token
+        const token = useAuthStore.getState().token || useSettingsStore.getState().apiToken;
         set({ isLoading: true, error: "" })
         try {
-            await updateSupplier(useSettingsStore.getState().apiToken, data)
-            get().fetchCompanies(token)
+            const response = await updateSupplier(token, data)
+            if (response && typeof response === 'object' && 'error' in response && response.error) {
+                const errorMessage = (response as any).message || (response as any).error || 'Error al actualizar proveedor';
+                set({ error: String(errorMessage), isLoading: false });
+                return false;
+            }
+            await get().fetchCompanies(token)
             set({ isLoading: false })
             return true
         } catch (error) {

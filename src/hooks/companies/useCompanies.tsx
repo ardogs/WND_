@@ -1,7 +1,7 @@
 import { DefaultOptionType } from '../../components/atoms/select/types'
 import { useCompaniesStore } from '../../store/companies/useCompaniesStore'
 import { useShallow } from 'zustand/shallow'
-import { useMemo, useEffect } from 'react'
+import { useMemo, useEffect, useCallback } from 'react'
 
 export const useCompanies = () => {
   const {
@@ -38,13 +38,18 @@ export const useCompanies = () => {
     }))
   }, [companyData])
 
-  const onCompanyChange = (company: string) => {
-    const data = companyData.find(
-      (element) => element.registration_number === company
-    )
-    if (!data) return
-    setCurrentCompany(data.registration_number)
-  }
+  const onCompanyChange = useCallback(
+    (company: string) => {
+      const data = companyData.find(
+        (element) => element.registration_number === company
+      )
+      if (!data) return
+      if (data.registration_number !== registration_number_id) {
+        setCurrentCompany(data.registration_number)
+      }
+    },
+    [companyData, registration_number_id, setCurrentCompany]
+  )
 
   return {
     companyData,

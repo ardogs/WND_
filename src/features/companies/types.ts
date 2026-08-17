@@ -7,7 +7,9 @@ export interface Company {
     category: string
     tel_fax: string
     website: string,
-    img: string
+    img: string,
+    quotation_fields_config?: Record<string, boolean>,
+    quotation_excel_mapping?: Record<string, string>
 }
 
 export type companyDataSelectorType = 'dependent' | 'independent';
